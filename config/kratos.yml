@@ -46,12 +46,16 @@ selfservice:
     login:
       ui_url: ${SELFSERVICE_URL}/login
       lifespan: 10m
+      after:
+        code:
+          hooks:
+            - hook: session
 
     registration:
       lifespan: 10m
       ui_url: ${SELFSERVICE_URL}/registration
       after:
-        password:
+        code:
           hooks:
             - hook: session
             - hook: show_verification_ui
