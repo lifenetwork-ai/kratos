@@ -46,10 +46,6 @@ selfservice:
     login:
       ui_url: ${SELFSERVICE_URL}/login
       lifespan: 10m
-      after:
-        code:
-          hooks:
-            - hook: session
 
     registration:
       lifespan: 10m
