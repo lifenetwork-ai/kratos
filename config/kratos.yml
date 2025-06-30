@@ -53,8 +53,8 @@ selfservice:
       after:
         password:
           hooks:
-            -
-              hook: session
+            - hook: session
+            - hook: show_verification_ui
 
 log:
   level: debug
