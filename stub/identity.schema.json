@@ -1,0 +1,66 @@
+{
+  "$id": "https://www.lifenetwork.ai/schemas/identity.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User",
+  "type": "object",
+  "properties": {
+    "traits": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "E-Mail",
+          "type": "string",
+          "format": "email",
+          "maxLength": 320,
+          "ory.sh/kratos": {
+            "credentials": {
+              "password": {
+                "identifier": true
+              },
+              "code": {
+                "identifier": true,
+                "via": "email"
+              }
+            },
+            "verification": {
+              "via": "email"
+            },
+            "recovery": {
+              "via": "email"
+            }
+          }
+        },
+        "phone_number": {
+          "title": "Phone Number",
+          "type": "string",
+          "format": "tel",
+          "ory.sh/kratos": {
+            "credentials": {
+              "password": {
+                "identifier": true
+              },
+              "code": {
+                "identifier": true,
+                "via": "sms"
+              }
+            },
+            "verification": {
+              "via": "sms"
+            }
+          }
+        },
+        "tenant": {
+          "title": "Tenant",
+          "type": "string",
+          "enum": ["life_ai", "genetica"]
+        }
+      },
+      "anyOf": [
+        { "required": ["email"] },
+        { "required": ["phone_number"] }
+      ],
+      "required": ["tenant"],
+      "additionalProperties": false
+    }
+  }
+}

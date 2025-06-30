@@ -1,0 +1,106 @@
+dsn: memory
+
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        - ${SELFSERVICE_URL}
+  admin:
+    base_url: http://kratos:4434/
+
+selfservice:
+  default_browser_return_url: ${SELFSERVICE_URL}/welcome
+  allowed_return_urls:
+    - ${SELFSERVICE_URL}
+
+  methods:
+    password:
+      enabled: true
+
+  flows:
+    error:
+      ui_url: ${SELFSERVICE_URL}/error
+
+    settings:
+      ui_url: ${SELFSERVICE_URL}/settings
+      privileged_session_max_age: 15m
+
+    recovery:
+      enabled: true
+      ui_url: ${SELFSERVICE_URL}/recovery
+
+    verification:
+      enabled: true
+      ui_url: ${SELFSERVICE_URL}/verification
+      after:
+        default_browser_return_url: ${SELFSERVICE_URL}/welcome
+
+    logout:
+      after:
+        default_browser_return_url: ${SELFSERVICE_URL}/login
+
+    login:
+      ui_url: ${SELFSERVICE_URL}/login
+      lifespan: 10m
+
+    registration:
+      lifespan: 10m
+      ui_url: ${SELFSERVICE_URL}/registration
+      after:
+        password:
+          hooks:
+            -
+              hook: session
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+
+cookies:
+  domain: ${DOMAIN}
+  same_site: None
+
+session:
+  cookie:
+    domain: ${DOMAIN}
+    same_site: None
+
+hashers:
+  argon2:
+    parallelism: 1
+    memory: 128MB
+    iterations: 2
+    salt_length: 16
+    key_length: 16
+
+identity:
+  schemas:
+    - id: default
+      url: file:///stub/identity.schema.json
+
+courier:
+  smtp:
+    connection_uri: ${SMTP_CONNECTION_URI}
+    from_address: ${SMTP_FROM_ADDRESS}
+  channels:
+    - id: sms
+      type: http
+      request_config:
+        url: ${TWILIO_URL}
+        method: POST
+        body: ${TWILIO_BODY}
+        headers:
+          Content-Type: application/x-www-form-urlencoded
+        auth:
+          type: basic_auth
+          config:
+            user: ${TWILIO_USER}
+            password: ${TWILIO_PASS}
+
