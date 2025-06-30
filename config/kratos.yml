@@ -16,8 +16,10 @@ selfservice:
     - ${SELFSERVICE_URL}
 
   methods:
+    code:
+      passwordless_enabled: true
     password:
-      enabled: true
+      enabled: false
 
   flows:
     error:

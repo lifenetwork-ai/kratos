@@ -14,9 +14,6 @@
           "maxLength": 320,
           "ory.sh/kratos": {
             "credentials": {
-              "password": {
-                "identifier": true
-              },
               "code": {
                 "identifier": true,
                 "via": "email"
@@ -36,9 +33,6 @@
           "format": "tel",
           "ory.sh/kratos": {
             "credentials": {
-              "password": {
-                "identifier": true
-              },
               "code": {
                 "identifier": true,
                 "via": "sms"
