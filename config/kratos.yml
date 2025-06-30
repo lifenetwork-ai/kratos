@@ -89,14 +89,14 @@ courier:
   smtp:
     connection_uri: ${SMTP_CONNECTION_URI}
     from_address: ${SMTP_FROM_ADDRESS}
-  sms:
-    enabled: true
-    from: '+84999999999'
-    request_config:
-      url: https://webhook.site/66469df5-4fbc-4b6b-a02f-619035343172
-      method: POST
-      headers:
-        Content-Type: application/json
-      body: base64://eyJUbzI6ICJ7eyBzLnJlY2lwaWVudCB9fSIsICJib2R5IjogInt7IHMubWVzc2FnZSB9fSJ9
+  channels:
+    - id: sms
+      type: http
+      request_config:
+        url: https://webhook.site/66469df5-4fbc-4b6b-a02f-619035343172
+        method: POST
+        headers:
+          Content-Type: application/json
+        body: base64://eyJUbzI6ICJ7eyBzLnJlY2lwaWVudCB9fSIsICJib2R5IjogInt7IHMubWVzc2FnZSB9fSJ9
 
 
