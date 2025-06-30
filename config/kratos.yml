@@ -99,6 +99,6 @@ courier:
         method: POST
         headers:
           Content-Type: application/json
-        body: base64://eyJUbzoiIHt7IHMucmVjaXBpZW50IH19IiwgImJvZHkiOiAie3sgcy5tZXNzYWdlIH19In0=
+        body: base64://eyJUbyI6ICJ7eyBzLnJlY2lwaWVudCB9fSIsICJib2R5IjogInt7IHMubWVzc2FnZSB9fSJ9
 
 
