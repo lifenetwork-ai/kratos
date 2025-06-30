@@ -20,7 +20,7 @@
               }
             },
             "verification": {
-              "via": "sms"
+              "via": "email"
             },
             "recovery": {
               "via": "email"
