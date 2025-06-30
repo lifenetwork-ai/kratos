@@ -16,4 +16,4 @@ echo "Rendering kratos.yml from env vars..."
 envsubst < /etc/config/kratos_template.yml > /etc/config/kratos.yml
 
 echo "Starting ORY Kratos with rendered config..."
-exec /usr/bin/kratos serve -c /etc/config/kratos.yml
+exec /usr/bin/kratos serve --watch-courier -c /etc/config/kratos.yml
