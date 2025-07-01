@@ -34,7 +34,7 @@ selfservice:
       ui_url: ${SELFSERVICE_URL}/recovery
 
     verification:
-      enabled: true
+      enabled: false
       ui_url: ${SELFSERVICE_URL}/verification
       after:
         default_browser_return_url: ${SELFSERVICE_URL}/welcome
