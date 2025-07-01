@@ -10,10 +10,17 @@ export TWILIO_URL=${TWILIO_URL:-https://api.twilio.com/2010-04-01/Accounts/XXX/M
 export TWILIO_USER=${TWILIO_USER:-default_user}
 export TWILIO_PASS=${TWILIO_PASS:-default_pass}
 export TWILIO_BODY=${TWILIO_BODY:-base64://ZnVuY3Rpb24oY3R4KSB7CiAgVG86IGN0eC5yZWNpcGllbnQsCiAgQm9keTogY3R4LmJvZHksCn0=}
+export ENABLE_COURIER=${ENABLE_COURIER:-false}
 
+# Decide whether to enable courier worker
+if [ "$ENABLE_COURIER" = "true" ]; then
+  KRATOS_CMD="kratos serve --watch-courier -c /etc/config/kratos.yml"
+else
+  KRATOS_CMD="kratos serve -c /etc/config/kratos.yml"
+fi
 
 echo "Rendering kratos.yml from env vars..."
 envsubst < /etc/config/kratos_template.yml > /etc/config/kratos.yml
 
-echo "Starting ORY Kratos with rendered config..."
-exec /usr/bin/kratos serve --watch-courier -c /etc/config/kratos.yml
+echo "Starting ORY Kratos with command: $KRATOS_CMD"
+exec $KRATOS_CMD
