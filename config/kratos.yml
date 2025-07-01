@@ -95,7 +95,7 @@ courier:
     - id: sms
       type: http
       request_config:
-        url: https://webhook.site/66469df5-4fbc-4b6b-a02f-619035343172
+        url: ${SMS_WEBHOOK_URL}
         method: POST
         headers:
           Content-Type: application/json
