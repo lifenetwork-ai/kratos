@@ -27,7 +27,8 @@ selfservice:
 
     settings:
       ui_url: ${SELFSERVICE_URL}/settings
-      privileged_session_max_age: 0s
+      lifespan: 99m
+      privileged_session_max_age: 5m
       required_aal: highest_available
 
     recovery:
