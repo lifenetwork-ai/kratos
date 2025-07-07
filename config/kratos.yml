@@ -28,9 +28,13 @@ selfservice:
     settings:
       ui_url: ${SELFSERVICE_URL}/settings
       privileged_session_max_age: 15m
+      after:
+        code:
+          hooks:
+            - hook: session
+            - hook: show_verification_ui
 
     recovery:
-      enabled: true
       ui_url: ${SELFSERVICE_URL}/recovery
 
     verification:
