@@ -30,6 +30,10 @@ selfservice:
       lifespan: 99m
       privileged_session_max_age: 5m
       required_aal: highest_available
+      after:
+        profile:
+          hooks:
+            - hook: revoke_active_sessions
 
     recovery:
       ui_url: ${SELFSERVICE_URL}/recovery
