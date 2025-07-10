@@ -31,9 +31,8 @@ selfservice:
       privileged_session_max_age: 5m
       required_aal: highest_available
       after:
-        code:
-          hooks:
-            - hook: revoke_active_sessions
+        hooks:
+          - hook: revoke_active_sessions
 
     recovery:
       ui_url: ${SELFSERVICE_URL}/recovery
