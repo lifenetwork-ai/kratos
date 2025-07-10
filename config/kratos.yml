@@ -31,7 +31,7 @@ selfservice:
       privileged_session_max_age: 5m
       required_aal: highest_available
       after:
-        profile:
+        code:
           hooks:
             - hook: revoke_active_sessions
 
