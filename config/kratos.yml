@@ -45,11 +45,11 @@ selfservice:
         default_browser_return_url: ${SELFSERVICE_URL}/login
 
     login:
+      lifespan: 5m
       ui_url: ${SELFSERVICE_URL}/login
-      lifespan: 10m
 
     registration:
-      lifespan: 10m
+      lifespan: 5m
       ui_url: ${SELFSERVICE_URL}/registration
       after:
         code:
