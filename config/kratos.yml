@@ -71,6 +71,7 @@ cookies:
   same_site: None
 
 session:
+  lifespan: 720h #30 days
   cookie:
     domain: ${DOMAIN}
     same_site: None
