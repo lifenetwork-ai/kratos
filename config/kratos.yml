@@ -17,6 +17,8 @@ selfservice:
 
   methods:
     code:
+      config:
+        lifespan: 5m
       passwordless_enabled: true
     password:
       enabled: false
