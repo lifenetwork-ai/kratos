@@ -12,6 +12,7 @@
           "type": "string",
           "format": "email",
           "maxLength": 320,
+          "verifiable": true,
           "ory.sh/kratos": {
             "credentials": {
               "code": {
@@ -28,6 +29,7 @@
           "title": "Phone Number",
           "type": "string",
           "format": "tel",
+          "verifiable": true,
           "ory.sh/kratos": {
             "credentials": {
               "code": {
