@@ -37,8 +37,10 @@ selfservice:
       ui_url: ${SELFSERVICE_URL}/recovery
 
     verification:
-      enabled: false
+      enabled: true
+      lifespan: 10m
       ui_url: ${SELFSERVICE_URL}/verification
+      use: code
       after:
         default_browser_return_url: ${SELFSERVICE_URL}/welcome
 
