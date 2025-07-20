@@ -37,7 +37,7 @@ selfservice:
       ui_url: ${SELFSERVICE_URL}/recovery
 
     verification:
-      enabled: true
+      enabled: false
       lifespan: 5m
       ui_url: ${SELFSERVICE_URL}/verification
       use: code
