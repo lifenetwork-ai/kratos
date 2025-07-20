@@ -20,7 +20,7 @@
                 "via": "email"
               }
             },
-            "recovery": {
+            "verification": {
               "via": "email"
             }
           }
@@ -36,6 +36,9 @@
                 "identifier": true,
                 "via": "sms"
               }
+            },
+            "verification": {
+              "via": "sms"
             }
           }
         },
