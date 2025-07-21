@@ -1,6 +1,3 @@
-// Copyright © 2023 Ory Corp
-// SPDX-License-Identifier: Apache-2.0
-
 package sms_test
 
 import (
@@ -19,13 +16,23 @@ func TestNewRegistrationCodeValid(t *testing.T) {
 	_, reg := internal.NewFastRegistryWithMocks(t)
 
 	const (
-		expectedPhone = "+12345678901"
-		otp           = "012345"
+		expectedPhone  = "+12345678901"
+		otp            = "012345"
+		expectedTenant = "tenant"
 	)
 
-	tpl := sms.NewRegistrationCodeValid(reg, &sms.RegistrationCodeValidModel{To: expectedPhone, RegistrationCode: otp})
+	tpl := sms.NewRegistrationCodeValid(reg, &sms.RegistrationCodeValidModel{
+		To:               expectedPhone,
+		RegistrationCode: otp,
+		ExpiresInMinutes: 0,
+		Identity: map[string]interface{}{
+			"traits": map[string]interface{}{
+				"tenant": expectedTenant,
+			},
+		},
+	})
 
-	expectedBody := fmt.Sprintf("Your registration code is: %s\n\nIt expires in 0 minutes.\n", otp)
+	expectedBody := fmt.Sprintf("[%s] Your registration code is: %s\nIt expires in 0 minutes.\n", expectedTenant, otp)
 
 	actualBody, err := tpl.SMSBody(context.Background())
 	require.NoError(t, err)
