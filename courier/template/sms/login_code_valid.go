@@ -34,14 +34,32 @@ func (t *LoginCodeValid) PhoneNumber() (string, error) {
 	return t.model.To, nil
 }
 
+// getTenant extracts the tenant information from the identity traits.
+func (t *LoginCodeValid) getTenant() string {
+	if traits, ok := t.model.Identity["traits"].(map[string]interface{}); ok {
+		if tenant, ok := traits["tenant"].(string); ok {
+			return tenant
+		}
+	}
+	return "Unknown"
+}
+
 func (t *LoginCodeValid) SMSBody(ctx context.Context) (string, error) {
+	data := struct {
+		*LoginCodeValidModel
+		Tenant string
+	}{
+		LoginCodeValidModel: t.model,
+		Tenant:              t.getTenant(),
+	}
+
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
 		"login_code/valid/sms.body.gotmpl",
 		"login_code/valid/sms.body*",
-		t.model,
+		data,
 		t.deps.CourierConfig().CourierSMSTemplatesLoginCodeValid(ctx).Body.PlainText,
 	)
 }

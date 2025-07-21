@@ -19,13 +19,24 @@ func TestNewLoginCodeValid(t *testing.T) {
 	_, reg := internal.NewFastRegistryWithMocks(t)
 
 	const (
-		expectedPhone = "+12345678901"
-		otp           = "012345"
+		expectedPhone  = "+12345678901"
+		otp            = "012345"
+		expectedTenant = "tenant"
 	)
 
-	tpl := sms.NewLoginCodeValid(reg, &sms.LoginCodeValidModel{To: expectedPhone, LoginCode: otp})
+	tpl := sms.NewLoginCodeValid(reg, &sms.LoginCodeValidModel{
+		To:               expectedPhone,
+		LoginCode:        otp,
+		ExpiresInMinutes: 0,
+		Identity: map[string]interface{}{
+			"traits": map[string]interface{}{
+				"tenant": expectedTenant,
+			},
+		},
+	})
 
-	expectedBody := fmt.Sprintf("Your login code is: %s\n\nIt expires in 0 minutes.\n", otp)
+	// Update expected body to match the new template
+	expectedBody := fmt.Sprintf("[%s] Your login code is: %s\nIt expires in 0 minutes.\n", expectedTenant, otp)
 
 	actualBody, err := tpl.SMSBody(context.Background())
 	require.NoError(t, err)
