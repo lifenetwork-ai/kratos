@@ -36,10 +36,19 @@ func (t *LoginCodeValid) PhoneNumber() (string, error) {
 
 // getTenant extracts the tenant information from the identity traits.
 func (t *LoginCodeValid) getTenant() string {
+	// Prefer to get tenant from identity traits
 	if traits, ok := t.model.Identity["traits"].(map[string]interface{}); ok {
 		if tenant, ok := traits["tenant"].(string); ok {
 			return tenant
 		}
+	}
+	// Fallback from transient payload if set in the flow
+	if tenant, ok := t.model.TransientPayload["tenant"].(string); ok {
+		return tenant
+	}
+	// Fallback to environment variable TENANT_NAME if not set in traits or transient payload
+	if fallback := os.Getenv("TENANT_NAME"); fallback != "" {
+		return fallback
 	}
 	return "Unknown"
 }

@@ -46,6 +46,10 @@ func (t *RegistrationCodeValid) getTenant() string {
 	if tenant, ok := t.model.TransientPayload["tenant"].(string); ok {
 		return tenant
 	}
+	// Fallback to environment variable TENANT_NAME if not set in traits or transient payload
+	if fallback := os.Getenv("TENANT_NAME"); fallback != "" {
+		return fallback
+	}
 	return "Unknown"
 }
 
