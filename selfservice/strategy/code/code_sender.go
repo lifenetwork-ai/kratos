@@ -314,17 +314,26 @@ func (s *Sender) SendVerificationCode(ctx context.Context, f *verification.Flow,
 		if err != nil {
 			return errors.WithStack(err)
 		}
-		if !notifyUnknownRecipients {
-			// do nothing
-		} else if err := s.send(ctx, string(via), email.NewVerificationCodeInvalid(s.deps, &email.VerificationCodeInvalidModel{
-			To:               to,
-			RequestURL:       f.GetRequestURL(),
-			TransientPayload: transientPayload,
-		})); err != nil {
-			return err
+		if notifyUnknownRecipients {
+			switch via {
+			case identity.ChannelTypeSMS:
+				s.deps.Logger().
+					WithField("via", via).
+					WithSensitiveField("phone_number", to).
+					Warn("Not sending SMS to unknown number.")
+			case identity.ChannelTypeEmail:
+				if err := s.send(ctx, via, email.NewVerificationCodeInvalid(s.deps, &email.VerificationCodeInvalidModel{
+					To:               to,
+					RequestURL:       f.GetRequestURL(),
+					TransientPayload: transientPayload,
+				})); err != nil {
+					return err
+				}
+			default:
+				return errors.WithStack(herodot.ErrInternalServerError.WithReasonf("unexpected channel type: %s", via))
+			}
 		}
 		return errors.WithStack(ErrUnknownAddress)
-
 	} else if err != nil {
 		return err
 	}
@@ -414,7 +423,6 @@ func (s *Sender) SendVerificationCodeTo(ctx context.Context, f *verification.Flo
 }
 
 func (s *Sender) send(ctx context.Context, via string, t courier.Template) error {
-	fmt.Printf("template type: %T\n", t)
 	switch f := stringsx.SwitchExact(via); {
 	case f.AddCase(identity.ChannelTypeEmail):
 		c, err := s.deps.Courier(ctx)
@@ -437,7 +445,6 @@ func (s *Sender) send(ctx context.Context, via string, t courier.Template) error
 
 		t, ok := t.(courier.SMSTemplate)
 		if !ok {
-			fmt.Printf("template does not implement SMSTemplate, got type: %T\n", t)
 			return errors.WithStack(herodot.ErrInternalServerError.WithReasonf("Expected sms template but got %T", t))
 		}
 
