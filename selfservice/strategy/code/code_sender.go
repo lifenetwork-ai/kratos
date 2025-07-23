@@ -379,6 +379,8 @@ func (s *Sender) SendVerificationCodeTo(ctx context.Context, f *verification.Flo
 
 	var t courier.Template
 
+	fmt.Println("code.VerifiableAddress.Via:", code.VerifiableAddress.Via)
+
 	// TODO: this can likely be abstracted by making templates not specific to the channel they're using
 	switch code.VerifiableAddress.Via {
 	case identity.ChannelTypeEmail:
