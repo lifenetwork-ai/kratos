@@ -5,6 +5,7 @@ package code
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 
 	"github.com/gofrs/uuid"
@@ -411,6 +412,7 @@ func (s *Sender) SendVerificationCodeTo(ctx context.Context, f *verification.Flo
 }
 
 func (s *Sender) send(ctx context.Context, via string, t courier.Template) error {
+	fmt.Printf("template type: %T\n", t)
 	switch f := stringsx.SwitchExact(via); {
 	case f.AddCase(identity.ChannelTypeEmail):
 		c, err := s.deps.Courier(ctx)
@@ -433,6 +435,7 @@ func (s *Sender) send(ctx context.Context, via string, t courier.Template) error
 
 		t, ok := t.(courier.SMSTemplate)
 		if !ok {
+			fmt.Printf("template does not implement SMSTemplate, got type: %T\n", t)
 			return errors.WithStack(herodot.ErrInternalServerError.WithReasonf("Expected sms template but got %T", t))
 		}
 
