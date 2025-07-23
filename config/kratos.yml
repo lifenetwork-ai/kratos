@@ -22,6 +22,8 @@ selfservice:
       passwordless_enabled: true
     password:
       enabled: false
+    profile:
+      enabled: true  
 
   flows:
     error:
@@ -30,7 +32,7 @@ selfservice:
     settings:
       ui_url: ${SELFSERVICE_URL}/settings
       lifespan: 99m
-      privileged_session_max_age: 5m
+      privileged_session_max_age: 1m
       required_aal: highest_available
 
     recovery:
