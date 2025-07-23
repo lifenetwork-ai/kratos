@@ -23,10 +23,11 @@ import (
 	"github.com/ory/kratos/selfservice/flow"
 
 	"github.com/gofrs/uuid"
-	"github.com/ory/pop/v6"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tidwall/gjson"
+
+	"github.com/ory/pop/v6"
 
 	"github.com/ory/kratos/driver"
 	"github.com/ory/kratos/driver/config"
