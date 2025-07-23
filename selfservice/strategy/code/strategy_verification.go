@@ -38,7 +38,7 @@ func (s *Strategy) RegisterAdminVerificationRoutes(admin *x.RouterAdmin) {
 // PopulateVerificationMethod set's the appropriate UI nodes on this flow
 //
 // If the flow's state is `sent_email`, the `code` input and the success notification is set
-// Otherwise, the default email input is added.
+// Otherwise, the default identifier input is added.
 // If the flow is a browser flow, the CSRF token is added to the UI.
 func (s *Strategy) PopulateVerificationMethod(r *http.Request, f *verification.Flow) error {
 	return s.PopulateMethod(r, f)
@@ -70,12 +70,14 @@ func (s *Strategy) handleVerificationError(r *http.Request, f *verification.Flow
 	if f != nil {
 		f.UI.SetCSRF(s.deps.GenerateCSRFToken(r))
 		email := ""
+		phone := ""
 		if body != nil {
 			email = body.Email
+			phone = body.Phone
 		}
-		f.UI.GetNodes().Upsert(
-			node.NewInputField("email", email, node.CodeGroup, node.InputAttributeTypeEmail, node.WithRequiredInputAttribute).WithMetaLabel(text.NewInfoNodeInputEmail()),
-		)
+		if updateErr := s.addVerificationNodes(r.Context(), &f.UI.Nodes, email, phone); updateErr != nil {
+			return errors.Wrap(err, updateErr.Error())
+		}
 	}
 
 	return err
@@ -118,9 +120,9 @@ type updateVerificationFlowWithCodeMethod struct {
 	// required: true
 	Method verification.VerificationStrategy `json:"method"`
 
-	// Code from the recovery email
+	// Code from the verification message
 	//
-	// If you want to submit a code, use this field, but make sure to _not_ include the email field, as well.
+	// If you want to submit a code, use this field, but make sure to _not_ include the email or phone fields.
 	//
 	// required: false
 	Code string `json:"code" form:"code"`
