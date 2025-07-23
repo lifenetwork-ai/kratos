@@ -96,6 +96,18 @@ type updateVerificationFlowWithCodeMethod struct {
 	// required: false
 	Email string `form:"email" json:"email"`
 
+	// The phone number to verify
+	//
+	// If the phone number belongs to a valid account, a verification SMS will be sent.
+	//
+	// If you want to notify the phone number if the account does not exist, see
+	// the notify_unknown_recipients flag
+	//
+	// If a code was already sent, including this field in the payload will invalidate the sent code and re-send a new code.
+	//
+	// required: false
+	Phone string `form:"phone" json:"phone"`
+
 	// Sending the anti-csrf token is only required for browser login flows.
 	CSRFToken string `form:"csrf_token" json:"csrf_token"`
 
