@@ -43,6 +43,7 @@ selfservice:
       lifespan: 5m
       ui_url: ${SELFSERVICE_URL}/verification
       use: code
+      notify_unknown_recipients: true
       after:
         default_browser_return_url: ${SELFSERVICE_URL}/welcome
 
