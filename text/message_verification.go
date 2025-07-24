@@ -24,7 +24,7 @@ func NewInfoSelfServiceVerificationSuccessful() *Message {
 	return &Message{
 		ID:   InfoSelfServiceVerificationSuccessful,
 		Type: Success,
-		Text: "You successfully verified your email address.",
+		Text: "You successfully verified your identifier.",
 	}
 }
 
