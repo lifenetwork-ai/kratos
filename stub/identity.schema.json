@@ -48,7 +48,7 @@
           "enum": ["life_ai", "genetica"]
         },
         "lang": {
-          "title": "Language",
+          "title": "Your preferred language",
           "type": "string",
           "enum": ["en", "vi"],
           "default": "en"

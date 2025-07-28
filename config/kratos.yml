@@ -112,6 +112,5 @@ courier:
   templates:
     email:
       directory: /templates/email
-      localization_enabled: true
 
 
