@@ -115,7 +115,7 @@ courier:
         email:
           body:
             plaintext: login_code/valid/email.body.gotmpl
-    register:
+    registration:
       valid:
         email:
           body:
