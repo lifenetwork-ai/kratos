@@ -1,26 +1,54 @@
 package template
 
-import "os"
+import (
+	"os"
+	"strings"
+)
+
+const (
+	TenantLifeAI   = "LIFE AI"
+	TenantGenetica = "GENETICA"
+)
 
 // GetTenantFromContext tries to extract the tenant name from identity traits or transient payload.
-// Falls back to TENANT_NAME env var or "Unknown".
+// Falls back to TENANT_NAME env var or "Unknown", then applies normalization.
 func GetTenantFromContext(identity map[string]interface{}, transientPayload map[string]interface{}) string {
-	// Prefer to get tenant from identity traits
+	var raw string
+
+	// 1. From identity.traits.tenant
 	if traits, ok := identity["traits"].(map[string]interface{}); ok {
-		if tenant, ok := traits["tenant"].(string); ok {
-			return tenant
+		if t, ok := traits["tenant"].(string); ok {
+			raw = t
 		}
 	}
 
-	// Fallback to transient payload
-	if tenant, ok := transientPayload["tenant"].(string); ok {
-		return tenant
+	// 2. From transient payload
+	if raw == "" {
+		if t, ok := transientPayload["tenant"].(string); ok {
+			raw = t
+		}
 	}
 
-	// Fallback to environment
-	if fallback := os.Getenv("TENANT_NAME"); fallback != "" {
-		return fallback
+	// 3. From env
+	if raw == "" {
+		raw = os.Getenv("TENANT_NAME")
 	}
 
-	return "Unknown"
+	if raw == "" {
+		raw = "Unknown"
+	}
+
+	return normalizeTenant(raw)
+}
+
+// normalizeTenant standardizes tenant display names.
+func normalizeTenant(t string) string {
+	switch strings.ToLower(t) {
+	case "life_ai", "lifeai", "life ai":
+		return TenantLifeAI
+	case "genetica":
+		return TenantGenetica
+	default:
+		return t
+	}
 }
