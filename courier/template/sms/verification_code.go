@@ -35,32 +35,13 @@ func (t *VerificationCodeValid) PhoneNumber() (string, error) {
 	return t.model.To, nil
 }
 
-// getTenant extracts the tenant information from the identity traits.
-func (t *VerificationCodeValid) getTenant() string {
-	// Prefer to get tenant from identity traits
-	if traits, ok := t.model.Identity["traits"].(map[string]interface{}); ok {
-		if tenant, ok := traits["tenant"].(string); ok {
-			return tenant
-		}
-	}
-	// Fallback from transient payload if set in the flow
-	if tenant, ok := t.model.TransientPayload["tenant"].(string); ok {
-		return tenant
-	}
-	// Fallback to environment variable TENANT_NAME if not set in traits or transient payload
-	if fallback := os.Getenv("TENANT_NAME"); fallback != "" {
-		return fallback
-	}
-	return "Unknown"
-}
-
 func (t *VerificationCodeValid) SMSBody(ctx context.Context) (string, error) {
 	data := struct {
 		*VerificationCodeValidModel
 		Tenant string
 	}{
 		VerificationCodeValidModel: t.model,
-		Tenant:                     t.getTenant(),
+		Tenant:                     template.GetTenantFromContext(t.model.Identity, t.model.TransientPayload),
 	}
 
 	return template.LoadText(
