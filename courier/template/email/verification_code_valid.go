@@ -37,13 +37,21 @@ func (t *VerificationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error) {
+	data := struct {
+		*VerificationCodeValidModel
+		Tenant string
+	}{
+		VerificationCodeValidModel: t.m,
+		Tenant:                     template.GetTenantFromContext(t.m.Identity, t.m.TransientPayload),
+	}
+
 	subject, err := template.LoadText(
 		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
 		"verification_code/valid/email.subject.gotmpl",
 		"verification_code/valid/email.subject*",
-		t.m,
+		data,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Subject,
 	)
 
@@ -51,23 +59,41 @@ func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error
 }
 
 func (t *VerificationCodeValid) EmailBody(ctx context.Context) (string, error) {
-	return template.LoadHTML(ctx,
+	data := struct {
+		*VerificationCodeValidModel
+		Tenant string
+	}{
+		VerificationCodeValidModel: t.m,
+		Tenant:                     template.GetTenantFromContext(t.m.Identity, t.m.TransientPayload),
+	}
+
+	return template.LoadHTML(
+		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
 		"verification_code/valid/email.body.gotmpl",
 		"verification_code/valid/email.body*",
-		t.m,
+		data,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.HTML,
 	)
 }
 
 func (t *VerificationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	return template.LoadText(ctx,
+	data := struct {
+		*VerificationCodeValidModel
+		Tenant string
+	}{
+		VerificationCodeValidModel: t.m,
+		Tenant:                     template.GetTenantFromContext(t.m.Identity, t.m.TransientPayload),
+	}
+
+	return template.LoadText(
+		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
 		"verification_code/valid/email.body.plaintext.gotmpl",
 		"verification_code/valid/email.body.plaintext*",
-		t.m,
+		data,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.PlainText,
 	)
 }

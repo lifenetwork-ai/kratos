@@ -67,7 +67,7 @@ selfservice:
 log:
   level: debug
   format: text
-  leak_sensitive_values: true
+  leak_sensitive_values: false
 
 secrets:
   cookie:
@@ -109,5 +109,8 @@ courier:
         headers:
           Content-Type: application/json
         body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgVG86IGN0eC5yZWNpcGllbnQsCiAgQm9keTogY3R4LmJvZHksCn0=
+  templates:
+    email:
+      directory: /templates/email
 
 

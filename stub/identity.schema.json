@@ -46,6 +46,12 @@
           "title": "Tenant",
           "type": "string",
           "enum": ["life_ai", "genetica"]
+        },
+        "lang": {
+          "title": "Your preferred language",
+          "type": "string",
+          "enum": ["en", "vi"],
+          "default": "en"
         }
       },
       "anyOf": [
