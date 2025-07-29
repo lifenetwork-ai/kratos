@@ -1,0 +1,5 @@
+{{- if eq .Identity.traits.lang "vi" -}}
+{{ template "email.body.vi.gotmpl" . }}
+{{- else -}}
+{{ template "email.body.en.gotmpl" . }}
+{{- end -}}
