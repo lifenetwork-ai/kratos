@@ -36,17 +36,65 @@ func (t *LoginCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
-	subject, err := template.LoadText(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "login_code/valid/email.subject.gotmpl", "login_code/valid/email.subject*", t.model, t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Subject)
+	data := struct {
+		*LoginCodeValidModel
+		Tenant string
+	}{
+		LoginCodeValidModel: t.model,
+		Tenant:              template.GetTenantFromContext(t.model.Identity, t.model.TransientPayload),
+	}
+
+	subject, err := template.LoadText(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"login_code/valid/email.subject.gotmpl",
+		"login_code/valid/email.subject*",
+		data,
+		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Subject,
+	)
 
 	return strings.TrimSpace(subject), err
 }
 
 func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
-	return template.LoadHTML(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "login_code/valid/email.body.gotmpl", "login_code/valid/email.body*", t.model, t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.HTML)
+	data := struct {
+		*LoginCodeValidModel
+		Tenant string
+	}{
+		LoginCodeValidModel: t.model,
+		Tenant:              template.GetTenantFromContext(t.model.Identity, t.model.TransientPayload),
+	}
+
+	return template.LoadHTML(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"login_code/valid/email.body.gotmpl",
+		"login_code/valid/email.body*",
+		data,
+		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.HTML,
+	)
 }
 
 func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	return template.LoadText(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "login_code/valid/email.body.plaintext.gotmpl", "login_code/valid/email.body.plaintext*", t.model, t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.PlainText)
+	data := struct {
+		*LoginCodeValidModel
+		Tenant string
+	}{
+		LoginCodeValidModel: t.model,
+		Tenant:              template.GetTenantFromContext(t.model.Identity, t.model.TransientPayload),
+	}
+
+	return template.LoadText(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"login_code/valid/email.body.plaintext.gotmpl",
+		"login_code/valid/email.body.plaintext*",
+		data,
+		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.PlainText,
+	)
 }
 
 func (t *LoginCodeValid) MarshalJSON() ([]byte, error) {
