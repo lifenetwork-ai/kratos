@@ -109,5 +109,18 @@ courier:
         headers:
           Content-Type: application/json
         body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgVG86IGN0eC5yZWNpcGllbnQsCiAgQm9keTogY3R4LmJvZHksCn0=
+  templates:
+    login:
+      valid:
+        email:
+          body:
+            plaintext: login_code/valid/email.body.gotmpl
+    register:
+      valid:
+        email:
+          body:
+            plaintext: registration_code/valid/email.body.gotmpl
+          subject: registration_code/valid/email.subject.gotmpl
+  template_override_path: "../courier/template/courier/tenant/common/templates"      
 
 
