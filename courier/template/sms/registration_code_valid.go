@@ -28,10 +28,7 @@ type (
 )
 
 func NewRegistrationCodeValid(d template.Dependencies, m *RegistrationCodeValidModel) *RegistrationCodeValid {
-	var traits map[string]interface{}
-	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
-		traits = t
-	}
+	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
 	return &RegistrationCodeValid{deps: d, model: m}
@@ -42,12 +39,21 @@ func (t *RegistrationCodeValid) PhoneNumber() (string, error) {
 }
 
 func (t *RegistrationCodeValid) SMSBody(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"registration_code",
+		"valid",
+		"sms.body",
+	)
+
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"registration_code/valid/sms.body.gotmpl",
-		"registration_code/valid/sms.body*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierSMSTemplatesRegistrationCodeValid(ctx).Body.PlainText,
 	)

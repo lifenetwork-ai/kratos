@@ -1,6 +1,7 @@
 package template
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
@@ -55,4 +56,42 @@ func normalizeTenant(t string) string {
 func GetNormalizedTenantFromTraits(traits map[string]interface{}, transientPayload map[string]interface{}) string {
 	tenant := getTenantFromTraits(traits, transientPayload)
 	return normalizeTenant(tenant)
+}
+
+// getLangFromTraits extracts the language from traits, defaulting to "en" if not found.
+func getLangFromTraits(traits map[string]interface{}) string {
+	if lang, ok := traits["lang"].(string); ok && lang != "" {
+		return strings.ToLower(lang)
+	}
+	return "en"
+}
+
+// GetTemplatePathAndGlob constructs the template path and glob pattern based on traits, transient payload, action, status, and template name.
+func GetTemplatePathAndGlob(
+	traits map[string]interface{},
+	transientPayload map[string]interface{},
+	action string, // e.g. "registration_code"
+	status string, // e.g. "valid" or "invalid"
+	templateName string, // e.g. "email.subject"
+) (string, string) {
+	lang := getLangFromTraits(traits)
+	tenant := getTenantFromTraits(traits, transientPayload)
+
+	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
+	templatePath := fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
+	templateGlob := fmt.Sprintf("%s/%s.*", dir, templateName)
+
+	return templatePath, templateGlob
+}
+
+// GetTraitsFromIdentity safely extracts the traits object from a Kratos identity-like map.
+// Returns nil if not found or not a valid map.
+func GetTraitsFromIdentity(identity map[string]interface{}) map[string]interface{} {
+	if identity == nil {
+		return nil
+	}
+	if traits, ok := identity["traits"].(map[string]interface{}); ok {
+		return traits
+	}
+	return nil
 }
