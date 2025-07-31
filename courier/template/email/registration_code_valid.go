@@ -24,10 +24,17 @@ type (
 		RequestURL       string                 `json:"request_url"`
 		TransientPayload map[string]interface{} `json:"transient_payload"`
 		ExpiresInMinutes int                    `json:"expires_in_minutes"`
+		Tenant           string                 `json:"tenant"`
 	}
 )
 
 func NewRegistrationCodeValid(d template.Dependencies, m *RegistrationCodeValidModel) *RegistrationCodeValid {
+	var traits map[string]interface{}
+	if t, ok := m.Traits["traits"].(map[string]interface{}); ok {
+		traits = t
+	}
+	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
+
 	return &RegistrationCodeValid{deps: d, model: m}
 }
 
@@ -36,17 +43,41 @@ func (t *RegistrationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error) {
-	subject, err := template.LoadText(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "registration_code/valid/email.subject.gotmpl", "registration_code/valid/email.subject*", t.model, t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Subject)
+	subject, err := template.LoadText(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"registration_code/valid/email.subject.gotmpl",
+		"registration_code/valid/email.subject*",
+		t.model,
+		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Subject,
+	)
 
 	return strings.TrimSpace(subject), err
 }
 
 func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
-	return template.LoadHTML(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "registration_code/valid/email.body.gotmpl", "registration_code/valid/email.body*", t.model, t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.HTML)
+	return template.LoadHTML(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"registration_code/valid/email.body.gotmpl",
+		"registration_code/valid/email.body*",
+		t.model,
+		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.HTML,
+	)
 }
 
 func (t *RegistrationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	return template.LoadText(ctx, t.deps, os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)), "registration_code/valid/email.body.plaintext.gotmpl", "registration_code/valid/email.body.plaintext*", t.model, t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.PlainText)
+	return template.LoadText(
+		ctx,
+		t.deps,
+		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
+		"registration_code/valid/email.body.plaintext.gotmpl",
+		"registration_code/valid/email.body.plaintext*",
+		t.model,
+		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.PlainText,
+	)
 }
 
 func (t *RegistrationCodeValid) MarshalJSON() ([]byte, error) {

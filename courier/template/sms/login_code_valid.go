@@ -23,10 +23,17 @@ type (
 		RequestURL       string                 `json:"request_url"`
 		TransientPayload map[string]interface{} `json:"transient_payload"`
 		ExpiresInMinutes int                    `json:"expires_in_minutes"`
+		Tenant           string                 `json:"tenant"`
 	}
 )
 
 func NewLoginCodeValid(d template.Dependencies, m *LoginCodeValidModel) *LoginCodeValid {
+	var traits map[string]interface{}
+	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
+		traits = t
+	}
+	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
+
 	return &LoginCodeValid{deps: d, model: m}
 }
 
@@ -34,41 +41,14 @@ func (t *LoginCodeValid) PhoneNumber() (string, error) {
 	return t.model.To, nil
 }
 
-// getTenant extracts the tenant information from the identity traits.
-func (t *LoginCodeValid) getTenant() string {
-	// Prefer to get tenant from identity traits
-	if traits, ok := t.model.Identity["traits"].(map[string]interface{}); ok {
-		if tenant, ok := traits["tenant"].(string); ok {
-			return tenant
-		}
-	}
-	// Fallback from transient payload if set in the flow
-	if tenant, ok := t.model.TransientPayload["tenant"].(string); ok {
-		return tenant
-	}
-	// Fallback to environment variable TENANT_NAME if not set in traits or transient payload
-	if fallback := os.Getenv("TENANT_NAME"); fallback != "" {
-		return fallback
-	}
-	return "Unknown"
-}
-
 func (t *LoginCodeValid) SMSBody(ctx context.Context) (string, error) {
-	data := struct {
-		*LoginCodeValidModel
-		Tenant string
-	}{
-		LoginCodeValidModel: t.model,
-		Tenant:              t.getTenant(),
-	}
-
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
 		"login_code/valid/sms.body.gotmpl",
 		"login_code/valid/sms.body*",
-		data,
+		t.model,
 		t.deps.CourierConfig().CourierSMSTemplatesLoginCodeValid(ctx).Body.PlainText,
 	)
 }

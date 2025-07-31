@@ -25,10 +25,17 @@ type (
 		RequestURL       string                 `json:"request_url"`
 		TransientPayload map[string]interface{} `json:"transient_payload"`
 		ExpiresInMinutes int                    `json:"expires_in_minutes"`
+		Tenant           string                 `json:"tenant"`
 	}
 )
 
 func NewVerificationCodeValid(d template.Dependencies, m *VerificationCodeValidModel) *VerificationCodeValid {
+	var traits map[string]interface{}
+	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
+		traits = t
+	}
+	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
+
 	return &VerificationCodeValid{d: d, m: m}
 }
 
