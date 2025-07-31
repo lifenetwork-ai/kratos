@@ -29,10 +29,7 @@ type (
 )
 
 func NewRegistrationCodeValid(d template.Dependencies, m *RegistrationCodeValidModel) *RegistrationCodeValid {
-	var traits map[string]interface{}
-	if t, ok := m.Traits["traits"].(map[string]interface{}); ok {
-		traits = t
-	}
+	traits := template.GetTraitsFromIdentity(m.Traits)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
 	return &RegistrationCodeValid{deps: d, model: m}
@@ -43,12 +40,21 @@ func (t *RegistrationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Traits)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"registration_code",
+		"valid",
+		"email.subject",
+	)
+
 	subject, err := template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"registration_code/valid/email.subject.gotmpl",
-		"registration_code/valid/email.subject*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Subject,
 	)
@@ -57,24 +63,42 @@ func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error
 }
 
 func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Traits)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"registration_code",
+		"valid",
+		"email.body",
+	)
+
 	return template.LoadHTML(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"registration_code/valid/email.body.gotmpl",
-		"registration_code/valid/email.body*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.HTML,
 	)
 }
 
 func (t *RegistrationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Traits)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"registration_code",
+		"valid",
+		"email.body.plaintext",
+	)
+
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"registration_code/valid/email.body.plaintext.gotmpl",
-		"registration_code/valid/email.body.plaintext*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.PlainText,
 	)

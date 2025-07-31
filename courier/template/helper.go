@@ -83,3 +83,15 @@ func GetTemplatePathAndGlob(
 
 	return templatePath, templateGlob
 }
+
+// GetTraitsFromIdentity safely extracts the traits object from a Kratos identity-like map.
+// Returns nil if not found or not a valid map.
+func GetTraitsFromIdentity(identity map[string]interface{}) map[string]interface{} {
+	if identity == nil {
+		return nil
+	}
+	if traits, ok := identity["traits"].(map[string]interface{}); ok {
+		return traits
+	}
+	return nil
+}
