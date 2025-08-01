@@ -39,9 +39,8 @@ func (t *RegistrationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error) {
-	traits := template.GetTraitsFromIdentity(t.model.Traits)
 	templatePath, templateGlob := template.GetTemplatePathAndGlob(
-		traits,
+		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
 		"valid",
