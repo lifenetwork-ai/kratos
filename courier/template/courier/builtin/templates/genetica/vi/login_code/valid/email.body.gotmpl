@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Xác thực OTP</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6;">
+    <p>Kính gửi Quý Khách hàng,</p>
+
+    <p>
+      Để xác thực, vui lòng sử dụng mã OTP sau từ <strong>{{ .Tenant }}</strong>:
+    </p>
+
+    <p style="font-size: 24px; font-weight: bold; color: #2c3e50;">
+      {{ .LoginCode }}
+    </p>
+
+    <p>
+      Mã OTP của bạn sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút.<br />
+      Không chia sẻ OTP này với bất kỳ ai. <strong>{{ .Tenant }}</strong> rất coi trọng sự bảo mật tài khoản của bạn.
+    </p>
+  </body>
+</html>

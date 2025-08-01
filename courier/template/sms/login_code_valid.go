@@ -28,10 +28,7 @@ type (
 )
 
 func NewLoginCodeValid(d template.Dependencies, m *LoginCodeValidModel) *LoginCodeValid {
-	var traits map[string]interface{}
-	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
-		traits = t
-	}
+	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
 	return &LoginCodeValid{deps: d, model: m}
