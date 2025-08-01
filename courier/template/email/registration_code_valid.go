@@ -61,9 +61,8 @@ func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error
 }
 
 func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
-	traits := template.GetTraitsFromIdentity(t.model.Traits)
 	templatePath, templateGlob := template.GetTemplatePathAndGlob(
-		traits,
+		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
 		"valid",
@@ -82,9 +81,8 @@ func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
 }
 
 func (t *RegistrationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	traits := template.GetTraitsFromIdentity(t.model.Traits)
 	templatePath, templateGlob := template.GetTemplatePathAndGlob(
-		traits,
+		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
 		"valid",
