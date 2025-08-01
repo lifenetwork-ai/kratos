@@ -39,21 +39,12 @@ func (t *RegistrationCodeValid) PhoneNumber() (string, error) {
 }
 
 func (t *RegistrationCodeValid) SMSBody(ctx context.Context) (string, error) {
-	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
-		traits,
-		t.model.TransientPayload,
-		"registration_code",
-		"valid",
-		"sms.body",
-	)
-
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		templatePath,
-		templateGlob,
+		"registration_code/valid/sms.body.gotmpl",
+		"registration_code/valid/sms.body*",
 		t.model,
 		t.deps.CourierConfig().CourierSMSTemplatesRegistrationCodeValid(ctx).Body.PlainText,
 	)

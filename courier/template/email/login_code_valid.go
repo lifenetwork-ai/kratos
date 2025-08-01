@@ -6,6 +6,7 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"os"
 	"strings"
 
@@ -29,10 +30,8 @@ type (
 )
 
 func NewLoginCodeValid(d template.Dependencies, m *LoginCodeValidModel) *LoginCodeValid {
-	var traits map[string]interface{}
-	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
-		traits = t
-	}
+	log.Println("Traits:", m.Identity)
+	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
 	return &LoginCodeValid{deps: d, model: m}
@@ -43,12 +42,21 @@ func (t *LoginCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"login_code",
+		"valid",
+		"email.subject",
+	)
+
 	subject, err := template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"login_code/valid/email.subject.gotmpl",
-		"login_code/valid/email.subject*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Subject,
 	)
@@ -57,24 +65,42 @@ func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 }
 
 func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"login_code",
+		"valid",
+		"email.body",
+	)
+
 	return template.LoadHTML(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"login_code/valid/email.body.gotmpl",
-		"login_code/valid/email.body*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.HTML,
 	)
 }
 
 func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.model.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.model.TransientPayload,
+		"login_code",
+		"valid",
+		"email.body.plaintext",
+	)
+
 	return template.LoadText(
 		ctx,
 		t.deps,
 		os.DirFS(t.deps.CourierConfig().CourierTemplatesRoot(ctx)),
-		"login_code/valid/email.body.plaintext.gotmpl",
-		"login_code/valid/email.body.plaintext*",
+		templatePath,
+		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.PlainText,
 	)
