@@ -6,6 +6,7 @@ package sms
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"os"
 
 	"github.com/ory/kratos/courier/template"
@@ -28,6 +29,7 @@ type (
 )
 
 func NewRegistrationCodeValid(d template.Dependencies, m *RegistrationCodeValidModel) *RegistrationCodeValid {
+	log.Println("Traits:", m.Identity)
 	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 

@@ -6,7 +6,6 @@ package email
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"os"
 	"strings"
 
@@ -30,9 +29,7 @@ type (
 )
 
 func NewRegistrationCodeValid(d template.Dependencies, m *RegistrationCodeValidModel) *RegistrationCodeValid {
-	log.Println("Traits:", m.Traits)
-	traits := template.GetTraitsFromIdentity(m.Traits)
-	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
+	m.Tenant = template.GetNormalizedTenantFromTraits(m.Traits, m.TransientPayload)
 
 	return &RegistrationCodeValid{deps: d, model: m}
 }
