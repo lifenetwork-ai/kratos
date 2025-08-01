@@ -6,7 +6,6 @@ package email
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"os"
 	"strings"
 
@@ -30,7 +29,6 @@ type (
 )
 
 func NewLoginCodeValid(d template.Dependencies, m *LoginCodeValidModel) *LoginCodeValid {
-	log.Println("Traits:", m.Identity)
 	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
