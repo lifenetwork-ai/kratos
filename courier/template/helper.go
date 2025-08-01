@@ -2,7 +2,6 @@ package template
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 )
@@ -79,7 +78,6 @@ func GetTemplatePathAndGlob(
 	tenant := getTenantFromTraits(traits, transientPayload)
 
 	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
-	log.Println("Dir:", dir)
 	templatePath := fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
 	templateGlob := fmt.Sprintf("%s/%s.*", dir, templateName)
 
