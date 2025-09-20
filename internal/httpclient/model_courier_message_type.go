@@ -23,14 +23,12 @@ type CourierMessageType string
 const (
 	COURIERMESSAGETYPE_EMAIL CourierMessageType = "email"
 	COURIERMESSAGETYPE_PHONE CourierMessageType = "phone"
-	COURIERMESSAGETYPE_SMS   CourierMessageType = "sms"
 )
 
 // All allowed values of CourierMessageType enum
 var AllowedCourierMessageTypeEnumValues = []CourierMessageType{
 	"email",
 	"phone",
-	"sms",
 }
 
 func (v *CourierMessageType) UnmarshalJSON(src []byte) error {

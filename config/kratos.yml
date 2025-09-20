@@ -100,6 +100,7 @@ courier:
   smtp:
     connection_uri: ${SMTP_CONNECTION_URI}
     from_address: ${SMTP_FROM_ADDRESS}
+    from_name: ${SMTP_FROM_NAME}
   channels:
     - id: sms
       type: http

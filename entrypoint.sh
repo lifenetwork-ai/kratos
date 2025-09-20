@@ -6,6 +6,7 @@ export SELFSERVICE_URL=${SELFSERVICE_URL:-http://localhost:3000}
 export DOMAIN=${DOMAIN:-localhost}
 export SMTP_CONNECTION_URI=${SMTP_CONNECTION_URI:-smtps://user:pass@smtp.gmail.com:465/?skip_ssl_verify=false&legacy_ssl=true}
 export SMTP_FROM_ADDRESS=${SMTP_FROM_ADDRESS:-no-reply@lifenetwork.ai}
+export SMTP_FROM_NAME=${SMTP_FROM_NAME:-LIFE AI}
 export SMS_WEBHOOK_URL=${SMS_WEBHOOK_URL:-https://webhook.example}
 export ENABLE_COURIER=${ENABLE_COURIER:-false}
 
