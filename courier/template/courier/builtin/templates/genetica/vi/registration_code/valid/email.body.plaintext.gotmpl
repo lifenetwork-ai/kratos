@@ -1,8 +1,17 @@
-Kính gửi Quý Khách hàng,
+Dear valued customer,
+To authenticate, please use the following One Time Password (OTP) from {{ .Tenant }}:
 
+{{ .RegistrationCode }}
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.
+Do not share this OTP with anyone. {{ .Tenant }} takes your account security very seriously.
+
+---------------------------------------------
+
+Kính gửi Quý Khách hàng,
 Để xác thực, vui lòng sử dụng mã OTP sau từ {{ .Tenant }}:
 
 {{ .RegistrationCode }}
 
-Mã OTP của bạn sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút.  
-Không chia sẻ OTP này với bất kỳ ai. {{ .Tenant }} rất coi trọng sự bảo mật tài khoản của bạn.
+Mã OTP của bạn sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút.
+Vui lòng không chia sẻ mã OTP này với bất kỳ ai. {{ .Tenant }} rất coi trọng sự bảo mật tài khoản của bạn.
