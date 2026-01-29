@@ -30,10 +30,7 @@ type (
 )
 
 func NewVerificationCodeValid(d template.Dependencies, m *VerificationCodeValidModel) *VerificationCodeValid {
-	var traits map[string]interface{}
-	if t, ok := m.Identity["traits"].(map[string]interface{}); ok {
-		traits = t
-	}
+	traits := template.GetTraitsFromIdentity(m.Identity)
 	m.Tenant = template.GetNormalizedTenantFromTraits(traits, m.TransientPayload)
 
 	return &VerificationCodeValid{d: d, m: m}
@@ -44,12 +41,21 @@ func (t *VerificationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error) {
+	traits := template.GetTraitsFromIdentity(t.m.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.m.TransientPayload,
+		"verification_code",
+		"valid",
+		"email.subject",
+	)
+
 	subject, err := template.LoadText(
 		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
-		"verification_code/valid/email.subject.gotmpl",
-		"verification_code/valid/email.subject*",
+		templatePath,
+		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Subject,
 	)
@@ -58,22 +64,42 @@ func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error
 }
 
 func (t *VerificationCodeValid) EmailBody(ctx context.Context) (string, error) {
-	return template.LoadHTML(ctx,
+	traits := template.GetTraitsFromIdentity(t.m.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.m.TransientPayload,
+		"verification_code",
+		"valid",
+		"email.body",
+	)
+
+	return template.LoadHTML(
+		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
-		"verification_code/valid/email.body.gotmpl",
-		"verification_code/valid/email.body*",
+		templatePath,
+		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.HTML,
 	)
 }
 
 func (t *VerificationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	return template.LoadText(ctx,
+	traits := template.GetTraitsFromIdentity(t.m.Identity)
+	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+		traits,
+		t.m.TransientPayload,
+		"verification_code",
+		"valid",
+		"email.body.plaintext",
+	)
+
+	return template.LoadText(
+		ctx,
 		t.d,
 		os.DirFS(t.d.CourierConfig().CourierTemplatesRoot(ctx)),
-		"verification_code/valid/email.body.plaintext.gotmpl",
-		"verification_code/valid/email.body.plaintext*",
+		templatePath,
+		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.PlainText,
 	)
