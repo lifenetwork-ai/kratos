@@ -19,17 +19,19 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                <p style="margin: 0 0 16px;">Kính gửi Quý Khách hàng,</p>
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách,</p>{{ end }}
 
-                <p style="margin: 0 0 16px;">Để xác thực, vui lòng sử dụng mã OTP sau từ <strong>{{ .Tenant }}</strong>:</p>
+                {{ if and .TransientPayload (index .TransientPayload "action_description") }}<p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận giao dịch này.</p>{{ else }}<p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận.</p>{{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
-                  {{ .LoginCode }}
+                  {{ .VerificationCode }}
                 </p>
 
-                <p style="margin: 0 0 16px;">Mã OTP của bạn sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Không chia sẻ OTP này với bất kỳ ai.</p>
+                <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này trong ứng dụng {{ .Tenant }} để tiếp tục.</p>
 
-                <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> rất coi trọng sự bảo mật tài khoản của bạn. Nếu bạn cần hỗ trợ, vui lòng liên hệ với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                <p style="margin: 0 0 16px;">Mã OTP chỉ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút tới. Không chia sẻ OTP này với bất kỳ ai.</p>
+
+                <p style="margin: 0 0 16px;">Cảm ơn bạn đã chọn {{ .Tenant }}! Nếu bạn cần hỗ trợ, vui lòng liên hệ với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
               </td>
             </tr>
             <!-- Footer -->

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xác thực OTP</title>
+    <title>OTP Verification</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
@@ -19,17 +19,19 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                <p style="margin: 0 0 16px;">Kính gửi Quý Khách hàng,</p>
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Dear Valued Customer,</p>{{ end }}
 
-                <p style="margin: 0 0 16px;">Để xác thực, vui lòng sử dụng mã OTP sau từ <strong>{{ .Tenant }}</strong>:</p>
+                {{ if and .TransientPayload (index .TransientPayload "action_description") }}<p style="margin: 0 0 16px;">We have received a request to {{ index .TransientPayload "action_description" }}. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.</p>{{ else }}<p style="margin: 0 0 16px;">We have received a verification request from <strong>{{ .Tenant }}</strong>. For security reasons, please use the One-Time Password (OTP) provided below to confirm.</p>{{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
-                  {{ .LoginCode }}
+                  {{ .VerificationCode }}
                 </p>
 
-                <p style="margin: 0 0 16px;">Mã OTP của bạn sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Không chia sẻ OTP này với bất kỳ ai.</p>
+                <p style="margin: 0 0 16px;">Please enter this OTP in the {{ .Tenant }} app to proceed.</p>
 
-                <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> rất coi trọng sự bảo mật tài khoản của bạn. Nếu bạn cần hỗ trợ, vui lòng liên hệ với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
+
+                <p style="margin: 0 0 16px;">Thank you for choosing {{ .Tenant }}! If you need any assistance, feel free to reach out to us at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
               </td>
             </tr>
             <!-- Footer -->
