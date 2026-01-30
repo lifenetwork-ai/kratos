@@ -1,0 +1,16 @@
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.{{ else }}Chúng tôi vừa nhận được yêu cầu xác thực từ {{ .Tenant }}.{{ end }}
+
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+Mã OTP chỉ có hiệu lực trong {{ .ExpiresInMinutes }} phút tới.
+
+Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại support@lifenetwork.ai hoặc đổi mật khẩu tài khoản ngay lập tức.
+
+Cảm ơn bạn đã tin tưởng {{ .Tenant }}!
+
+Trân trọng,
+Đội ngũ {{ .Tenant }}
