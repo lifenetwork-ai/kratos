@@ -2,22 +2,45 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OTP Verification</title>
   </head>
-  <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6;">
-    <p>Dear Valued Customer,</p>
+  <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
+      <tr>
+        <td align="center" style="padding: 20px 0;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; max-width: 600px;">
+            <!-- Header with branding -->
+            <tr>
+              <td align="center" style="padding: 30px 20px;">
+                <img src="https://s3-ap-southeast-1.amazonaws.com/genetica.email-templates/build/assets/images/icons/life-ai.logo.png" alt="LIFE AI" width="60" style="display: block;" />
+              </td>
+            </tr>
+            <!-- Body content -->
+            <tr>
+              <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
+                <p style="margin: 0 0 16px;">Dear Valued Customer,</p>
 
-    <p>
-      To authenticate, please use the following One Time Password (OTP) from <strong>{{ .Tenant }}</strong>:
-    </p>
+                <p style="margin: 0 0 16px;">To authenticate, please use the following One-Time Password (OTP) from <strong>{{ .Tenant }}</strong>:</p>
 
-    <p style="font-size: 24px; font-weight: bold; color: #2c3e50;">
-      {{ .LoginCode }}
-    </p>
+                <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+                  {{ .LoginCode }}
+                </p>
 
-    <p>
-      Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes.<br />
-      Do not share this OTP with anyone. <strong>{{ .Tenant }}</strong> takes your account security very seriously.
-    </p>
+                <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
+
+                <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> takes your account security very seriously. If you need any assistance, feel free to reach out to us at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+              </td>
+            </tr>
+            <!-- Footer -->
+            <tr>
+              <td style="padding: 20px 40px; background-color: #fafafa; color: #999999; font-size: 12px; text-align: center; border-top: 1px solid #eeeeee;">
+                <p style="margin: 0;">&copy; {{ .Tenant }}. All rights reserved.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

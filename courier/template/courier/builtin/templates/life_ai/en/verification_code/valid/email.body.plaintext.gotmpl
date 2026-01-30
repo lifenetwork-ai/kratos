@@ -1,0 +1,16 @@
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},{{ else }}Dear Valued Customer,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}We have received a request to {{ index .TransientPayload "action_description" }}.{{ else }}We have received a verification request from {{ .Tenant }}.{{ end }}
+
+For security, please confirm by entering the One-Time Password (OTP) below in the {{ .Tenant }} app:
+
+{{ .VerificationCode }}
+
+This OTP will be valid for {{ .ExpiresInMinutes }} minutes.
+
+If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
+
+Thank you for trusting {{ .Tenant }}!
+
+Best regards,
+{{ .Tenant }} Team
