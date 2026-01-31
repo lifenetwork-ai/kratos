@@ -21,7 +21,7 @@
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
                 {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Dear Valued Customer,</p>{{ end }}
 
-                {{ if and .TransientPayload (index .TransientPayload "lp_amount") }}
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;">You have just requested to commit Life Points from your wallet. Here is your One-Time Password (OTP) to verify your commitment transaction:</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
                   <p style="margin: 0 0 16px;">We have received a request to {{ index .TransientPayload "action_description" }}. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.</p>
@@ -33,7 +33,7 @@
                   {{ .VerificationCode }}
                 </p>
 
-                {{ if and .TransientPayload (index .TransientPayload "lp_amount") }}
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;"><strong>Transaction details:</strong></p>
                   <p style="margin: 0 0 16px;">Commitment amount (LP): <strong>{{ index .TransientPayload "lp_amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Please enter this OTP to proceed with your Life Points commitment.</p>
