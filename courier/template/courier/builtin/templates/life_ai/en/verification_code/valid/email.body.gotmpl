@@ -35,7 +35,7 @@
 
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;"><strong>Transaction details:</strong></p>
-                  <p style="margin: 0 0 16px;">Commitment amount (LP): <strong>{{ index .TransientPayload "lp_amount" }}</strong></p>
+                  <p style="margin: 0 0 16px;">Commitment amount (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Please enter this OTP to proceed with your Life Points commitment.</p>
                 {{ else }}
                   <p style="margin: 0 0 16px;">Please enter this OTP in the {{ .Tenant }} app to proceed.</p>

@@ -1,11 +1,11 @@
 {{ if and .TransientPayload (index .TransientPayload "profile_name") }}Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},{{ else }}Dear Valued Customer,{{ end }}
 
-{{ if and .TransientPayload (hasKey .TransientPayload "lp_amount") }}You have just requested to commit Life Points from your wallet. Here is your One-Time Password (OTP) to verify your commitment transaction:
+{{ if and .TransientPayload (hasKey .TransientPayload "amount") }}You have just requested to commit Life Points from your wallet. Here is your One-Time Password (OTP) to verify your commitment transaction:
 
 {{ .VerificationCode }}
 
 Transaction details:
-Commitment amount (LP): {{ index .TransientPayload "lp_amount" }}
+Commitment amount (LP): {{ index .TransientPayload "amount" }}
 
 Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
 
