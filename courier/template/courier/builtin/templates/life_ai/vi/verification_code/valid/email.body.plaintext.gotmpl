@@ -1,6 +1,19 @@
-{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách,{{ end }}
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách hàng,{{ end }}
 
-{{ if and .TransientPayload (index .TransientPayload "action_description") }}Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.{{ else }}Chúng tôi vừa nhận được yêu cầu xác thực từ {{ .Tenant }}.{{ end }}
+{{ if and .TransientPayload (index .TransientPayload "amount") }}Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:
+
+{{ .VerificationCode }}
+
+📌 Chi tiết giao dịch:
+Số lượng Commit (LP): {{ index .TransientPayload "amount" }}
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai để đảm bảo an toàn cho tài khoản của quý khách.
+
+Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ {{ .Tenant }}
+{{ else if and .TransientPayload (index .TransientPayload "action_description") }}Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.
 
 Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng {{ .Tenant }}:
 
@@ -14,3 +27,18 @@ Cảm ơn bạn đã tin tưởng {{ .Tenant }}!
 
 Trân trọng,
 Đội ngũ {{ .Tenant }}
+{{ else }}Chúng tôi vừa nhận được yêu cầu xác thực từ {{ .Tenant }}.
+
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+Mã OTP chỉ có hiệu lực trong {{ .ExpiresInMinutes }} phút tới.
+
+Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại support@lifenetwork.ai hoặc đổi mật khẩu tài khoản ngay lập tức.
+
+Cảm ơn bạn đã tin tưởng {{ .Tenant }}!
+
+Trân trọng,
+Đội ngũ {{ .Tenant }}
+{{ end }}
