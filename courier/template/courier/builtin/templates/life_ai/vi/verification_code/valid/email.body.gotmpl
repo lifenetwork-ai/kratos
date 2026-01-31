@@ -19,19 +19,31 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách,</p>{{ end }}
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
 
-                {{ if and .TransientPayload (index .TransientPayload "action_description") }}<p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận giao dịch này.</p>{{ else }}<p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận.</p>{{ end }}
+                {{ if and .TransientPayload (index .TransientPayload "lp_amount") }}
+                  <p style="margin: 0 0 16px;">Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:</p>
+                {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận giao dịch này.</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận.</p>
+                {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                   {{ .VerificationCode }}
                 </p>
 
-                <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này trong ứng dụng {{ .Tenant }} để tiếp tục.</p>
+                {{ if and .TransientPayload (index .TransientPayload "lp_amount") }}
+                  <p style="margin: 0 0 16px;"><strong>📌 Chi tiết giao dịch:</strong></p>
+                  <p style="margin: 0 0 16px;">Số lượng Commit (LP): <strong>{{ index .TransientPayload "lp_amount" }}</strong></p>
+                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này để tiếp tục giao dịch Commit Life Points của quý khách.</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này trong ứng dụng {{ .Tenant }} để tiếp tục.</p>
+                {{ end }}
 
-                <p style="margin: 0 0 16px;">Mã OTP chỉ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút tới. Không chia sẻ OTP này với bất kỳ ai.</p>
+                <p style="margin: 0 0 16px;">Mã OTP này sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Vui lòng không chia sẻ mã này với bất kỳ ai để đảm bảo an toàn cho tài khoản của quý khách.</p>
 
-                <p style="margin: 0 0 16px;">Cảm ơn bạn đã chọn {{ .Tenant }}! Nếu bạn cần hỗ trợ, vui lòng liên hệ với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                <p style="margin: 0 0 16px;">Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
               </td>
             </tr>
             <!-- Footer -->
