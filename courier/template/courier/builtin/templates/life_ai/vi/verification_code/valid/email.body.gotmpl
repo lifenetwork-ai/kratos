@@ -24,9 +24,11 @@
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;">Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận giao dịch này.</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận.</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
@@ -37,13 +39,15 @@
                   <p style="margin: 0 0 16px;"><strong>📌 Chi tiết giao dịch:</strong></p>
                   <p style="margin: 0 0 16px;">Số lượng Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này để tiếp tục giao dịch Commit Life Points của quý khách.</p>
-                {{ else }}
-                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này trong ứng dụng {{ .Tenant }} để tiếp tục.</p>
                 {{ end }}
 
-                <p style="margin: 0 0 16px;">Mã OTP này sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Vui lòng không chia sẻ mã này với bất kỳ ai để đảm bảo an toàn cho tài khoản của quý khách.</p>
+                <p style="margin: 0 0 16px;">Mã OTP chỉ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút tới.</p>
 
-                <p style="margin: 0 0 16px;">Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                <p style="margin: 0 0 16px;">Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> hoặc đổi mật khẩu tài khoản ngay lập tức.</p>
+
+                <p style="margin: 0 0 16px;">Cảm ơn bạn đã tin tưởng LIFE AI!</p>
+
+                <p style="margin: 0 0 0;">Trân trọng,<br />Đội ngũ LIFE AI</p>
               </td>
             </tr>
             <!-- Footer -->
