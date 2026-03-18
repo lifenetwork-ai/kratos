@@ -67,21 +67,29 @@ func getLangFromTraits(traits map[string]interface{}) string {
 }
 
 // GetTemplatePathAndGlob constructs the template path and glob pattern based on traits, transient payload, action, status, and template name.
+// It returns the primary path/glob for the requested language and a fallback path/glob using "en".
+// If the requested language is already "en", fallback values are empty.
 func GetTemplatePathAndGlob(
 	traits map[string]interface{},
 	transientPayload map[string]interface{},
 	action string, // e.g. "registration_code"
 	status string, // e.g. "valid" or "invalid"
 	templateName string, // e.g. "email.subject"
-) (string, string) {
+) (templatePath, templateGlob, fallbackPath, fallbackGlob string) {
 	lang := getLangFromTraits(traits)
 	tenant := getTenantFromTraits(traits, transientPayload)
 
 	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
-	templatePath := fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
-	templateGlob := fmt.Sprintf("%s/%s.*", dir, templateName)
+	templatePath = fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
+	templateGlob = fmt.Sprintf("%s/%s.*", dir, templateName)
 
-	return templatePath, templateGlob
+	if lang != "en" {
+		fallbackDir := fmt.Sprintf("%s/%s/%s/%s", tenant, "en", action, status)
+		fallbackPath = fmt.Sprintf("%s/%s.gotmpl", fallbackDir, templateName)
+		fallbackGlob = fmt.Sprintf("%s/%s.*", fallbackDir, templateName)
+	}
+
+	return
 }
 
 // GetTraitsFromIdentity safely extracts the traits object from a Kratos identity-like map.

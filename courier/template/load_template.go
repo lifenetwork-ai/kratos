@@ -104,14 +104,17 @@ func loadRemoteTemplate(ctx context.Context, d templateDependencies, url string,
 	return t, nil
 }
 
-func loadTemplate(filesystem fs.FS, name, pattern string, html bool) (Template, error) {
+func loadTemplate(filesystem fs.FS, name, pattern string, html bool, fallbackName ...string) (Template, error) {
 	if t, found := Cache.Get(name); found {
 		return t, nil
 	}
 
 	matches, _ := fs.Glob(filesystem, name)
-	// make sure the file exists in the fs, otherwise fallback to built in templates
+	// make sure the file exists in the fs, otherwise try English fallback then built-in templates
 	if matches == nil {
+		if len(fallbackName) >= 2 && fallbackName[0] != "" {
+			return loadTemplate(filesystem, fallbackName[0], fallbackName[1], html)
+		}
 		return loadBuiltInTemplate(filesystem, name, html)
 	}
 
@@ -145,7 +148,7 @@ func loadTemplate(filesystem fs.FS, name, pattern string, html bool) (Template, 
 	return tpl, nil
 }
 
-func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string) (string, error) {
+func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
 	var t Template
 	var err error
 	if remoteURL != "" {
@@ -154,7 +157,7 @@ func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 			return "", err
 		}
 	} else {
-		t, err = loadTemplate(filesystem, name, pattern, false)
+		t, err = loadTemplate(filesystem, name, pattern, false, fallbackName...)
 		if err != nil {
 			return "", err
 		}
@@ -167,7 +170,7 @@ func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 	return b.String(), nil
 }
 
-func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string) (string, error) {
+func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
 	var t Template
 	var err error
 	if remoteURL != "" {
@@ -176,7 +179,7 @@ func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 			return "", err
 		}
 	} else {
-		t, err = loadTemplate(filesystem, name, pattern, true)
+		t, err = loadTemplate(filesystem, name, pattern, true, fallbackName...)
 		if err != nil {
 			return "", err
 		}

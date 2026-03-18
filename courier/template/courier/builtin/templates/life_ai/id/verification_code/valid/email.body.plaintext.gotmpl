@@ -1,0 +1,44 @@
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Yth. {{ index .TransientPayload "profile_name" }},{{ else }}Pelanggan Yang Terhormat,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "amount") }}Anda baru saja mengajukan permintaan Commit Life Points dari dompet Anda. Berikut adalah kode OTP untuk mengonfirmasi transaksi ini:
+
+{{ .VerificationCode }}
+
+📌 Detail transaksi:
+Jumlah Commit (LP): {{ index .TransientPayload "amount" }}
+
+OTP ini berlaku selama {{ .ExpiresInMinutes }} menit. Jangan bagikan kode ini kepada siapa pun demi keamanan akun Anda.
+
+Terima kasih telah bersama {{ .Tenant }}! Jika memerlukan bantuan, silakan hubungi kami di support@lifenetwork.ai.
+
+Hormat kami,
+Tim dukungan {{ .Tenant }}
+{{ else if and .TransientPayload (index .TransientPayload "action_description") }}Kami baru saja menerima permintaan {{ index .TransientPayload "action_description" }}.
+
+Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan.
+
+Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di support@lifenetwork.ai atau segera ubah kata sandi akun Anda.
+
+Terima kasih telah mempercayai {{ .Tenant }}!
+
+Hormat kami,
+Tim {{ .Tenant }}
+{{ else }}Kami baru saja menerima permintaan autentikasi dari {{ .Tenant }}.
+
+Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan.
+
+Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di support@lifenetwork.ai atau segera ubah kata sandi akun Anda.
+
+Terima kasih telah mempercayai {{ .Tenant }}!
+
+Hormat kami,
+Tim {{ .Tenant }}
+{{ end }}
