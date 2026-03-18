@@ -41,13 +41,23 @@ func (t *LoginCodeValid) EmailRecipient() (string, error) {
 
 func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlobWithLogger(
+		t.deps.Logger(),
 		traits,
 		t.model.TransientPayload,
 		"login_code",
 		"valid",
 		"email.subject",
 	)
+
+	t.deps.Logger().
+		WithField("traits", traits).
+		WithField("transient_payload", t.model.TransientPayload).
+		WithField("template_path", templatePath).
+		WithField("template_glob", templateGlob).
+		WithField("fallback_path", fallbackPath).
+		WithField("fallback_glob", fallbackGlob).
+		Debug("EmailSubject: resolving template")
 
 	subject, err := template.LoadText(
 		ctx,
@@ -65,13 +75,23 @@ func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 
 func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlobWithLogger(
+		t.deps.Logger(),
 		traits,
 		t.model.TransientPayload,
 		"login_code",
 		"valid",
 		"email.body",
 	)
+
+	t.deps.Logger().
+		WithField("traits", traits).
+		WithField("transient_payload", t.model.TransientPayload).
+		WithField("template_path", templatePath).
+		WithField("template_glob", templateGlob).
+		WithField("fallback_path", fallbackPath).
+		WithField("fallback_glob", fallbackGlob).
+		Debug("EmailBody: resolving template")
 
 	return template.LoadHTML(
 		ctx,
@@ -87,13 +107,23 @@ func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
 
 func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlobWithLogger(
+		t.deps.Logger(),
 		traits,
 		t.model.TransientPayload,
 		"login_code",
 		"valid",
 		"email.body.plaintext",
 	)
+
+	t.deps.Logger().
+		WithField("traits", traits).
+		WithField("transient_payload", t.model.TransientPayload).
+		WithField("template_path", templatePath).
+		WithField("template_glob", templateGlob).
+		WithField("fallback_path", fallbackPath).
+		WithField("fallback_glob", fallbackGlob).
+		Debug("EmailBodyPlaintext: resolving template")
 
 	return template.LoadText(
 		ctx,
