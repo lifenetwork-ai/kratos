@@ -41,7 +41,7 @@ func (t *LoginCodeValid) EmailRecipient() (string, error) {
 
 func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.model.TransientPayload,
 		"login_code",
@@ -57,6 +57,7 @@ func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Subject,
+		fallbackPath, fallbackGlob,
 	)
 
 	return strings.TrimSpace(subject), err
@@ -64,7 +65,7 @@ func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 
 func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.model.TransientPayload,
 		"login_code",
@@ -80,12 +81,13 @@ func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.HTML,
+		fallbackPath, fallbackGlob,
 	)
 }
 
 func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.model.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.model.TransientPayload,
 		"login_code",
@@ -101,6 +103,7 @@ func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error)
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.PlainText,
+		fallbackPath, fallbackGlob,
 	)
 }
 

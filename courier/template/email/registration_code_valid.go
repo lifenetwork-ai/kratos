@@ -39,7 +39,7 @@ func (t *RegistrationCodeValid) EmailRecipient() (string, error) {
 }
 
 func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error) {
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
@@ -55,13 +55,14 @@ func (t *RegistrationCodeValid) EmailSubject(ctx context.Context) (string, error
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Subject,
+		fallbackPath, fallbackGlob,
 	)
 
 	return strings.TrimSpace(subject), err
 }
 
 func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
@@ -77,11 +78,12 @@ func (t *RegistrationCodeValid) EmailBody(ctx context.Context) (string, error) {
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.HTML,
+		fallbackPath, fallbackGlob,
 	)
 }
 
 func (t *RegistrationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		t.model.Traits,
 		t.model.TransientPayload,
 		"registration_code",
@@ -97,6 +99,7 @@ func (t *RegistrationCodeValid) EmailBodyPlaintext(ctx context.Context) (string,
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesRegistrationCodeValid(ctx).Body.PlainText,
+		fallbackPath, fallbackGlob,
 	)
 }
 
