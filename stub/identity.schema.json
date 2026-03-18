@@ -50,7 +50,7 @@
         "lang": {
           "title": "Your preferred language",
           "type": "string",
-          "enum": ["en", "vi"],
+          "enum": ["vi", "en", "th", "ko", "zh", "id", "ms"],
           "default": "en"
         }
       },
