@@ -68,6 +68,7 @@ func (t *LoginCodeValid) EmailSubject(ctx context.Context) (string, error) {
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Subject,
 		fallbackPath, fallbackGlob,
+		fallbackPath, fallbackGlob,
 	)
 
 	return strings.TrimSpace(subject), err
@@ -102,6 +103,7 @@ func (t *LoginCodeValid) EmailBody(ctx context.Context) (string, error) {
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.HTML,
 		fallbackPath, fallbackGlob,
+		fallbackPath, fallbackGlob,
 	)
 }
 
@@ -133,6 +135,7 @@ func (t *LoginCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error)
 		templateGlob,
 		t.model,
 		t.deps.CourierConfig().CourierTemplatesLoginCodeValid(ctx).Body.PlainText,
+		fallbackPath, fallbackGlob,
 		fallbackPath, fallbackGlob,
 	)
 }

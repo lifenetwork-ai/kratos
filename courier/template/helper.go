@@ -71,6 +71,8 @@ func getLangFromTraits(traits map[string]interface{}) string {
 // GetTemplatePathAndGlob constructs the template path and glob pattern based on traits, transient payload, action, status, and template name.
 // It returns the primary path/glob for the requested language and a fallback path/glob using "en".
 // If the requested language is already "en", fallback values are empty.
+// It returns the primary path/glob for the requested language and a fallback path/glob using "en".
+// If the requested language is already "en", fallback values are empty.
 func GetTemplatePathAndGlob(
 	traits map[string]interface{},
 	transientPayload map[string]interface{},
@@ -106,6 +108,8 @@ func GetTemplatePathAndGlobWithLogger(
 	}
 
 	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
+	templatePath = fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
+	templateGlob = fmt.Sprintf("%s/%s.*", dir, templateName)
 	templatePath = fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
 	templateGlob = fmt.Sprintf("%s/%s.*", dir, templateName)
 

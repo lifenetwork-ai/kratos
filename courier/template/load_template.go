@@ -156,6 +156,7 @@ func loadTemplate(filesystem fs.FS, name, pattern string, html bool, logger *log
 }
 
 func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
+func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
 	var t Template
 	var err error
 	if remoteURL != "" {
@@ -178,6 +179,7 @@ func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 	return b.String(), nil
 }
 
+func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
 func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, name, pattern string, model interface{}, remoteURL string, fallbackName ...string) (string, error) {
 	var t Template
 	var err error
