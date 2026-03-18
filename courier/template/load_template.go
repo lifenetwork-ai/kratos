@@ -117,12 +117,18 @@ func loadTemplate(filesystem fs.FS, name, pattern string, html bool, logger *log
 
 	matches, _ := fs.Glob(filesystem, name)
 
-	// make sure the file exists in the fs, otherwise try English fallback then built-in templates
+	// make sure the file exists in the fs, otherwise try built-in templates first, then English fallback
 	if matches == nil {
+		// Try built-in (embedded) templates with the original language before falling back to English
+		t, err := loadBuiltInTemplate(filesystem, name, html)
+		if err == nil {
+			return t, nil
+		}
+		// If not found in built-in templates, try the English fallback path
 		if len(fallbackName) >= 2 && fallbackName[0] != "" {
 			return loadTemplate(filesystem, fallbackName[0], fallbackName[1], html, logger)
 		}
-		return loadBuiltInTemplate(filesystem, name, html)
+		return nil, err
 	}
 
 	glob := name
