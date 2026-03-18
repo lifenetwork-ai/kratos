@@ -15,6 +15,7 @@ import (
 
 	"github.com/ory/kratos/x"
 	"github.com/ory/x/fetcher"
+	"github.com/ory/x/logrusx"
 
 	"github.com/Masterminds/sprig/v3"
 	lru "github.com/hashicorp/golang-lru/v2"
@@ -32,6 +33,7 @@ type Template interface {
 
 type templateDependencies interface {
 	x.HTTPClientProvider
+	x.LoggingProvider
 }
 
 func loadBuiltInTemplate(filesystem fs.FS, name string, html bool) (Template, error) {
@@ -42,8 +44,9 @@ func loadBuiltInTemplate(filesystem fs.FS, name string, html bool) (Template, er
 	file, err := filesystem.Open(name)
 	if err != nil {
 		// try to fallback to bundled templates
+		bundledPath := filepath.Join("courier/builtin/templates", name)
 		var fallbackErr error
-		file, fallbackErr = templates.Open(filepath.Join("courier/builtin/templates", name))
+		file, fallbackErr = templates.Open(bundledPath)
 		if fallbackErr != nil {
 			// return original error from os.DirFS
 			return nil, errors.WithStack(err)
@@ -77,7 +80,9 @@ func loadBuiltInTemplate(filesystem fs.FS, name string, html bool) (Template, er
 }
 
 func loadRemoteTemplate(ctx context.Context, d templateDependencies, url string, html bool) (t Template, err error) {
+	d.Logger().WithField("template_url", url).WithField("html", html).Debug("Loading remote template")
 	if t, found := Cache.Get(url); found {
+		d.Logger().WithField("template_url", url).Debug("Remote template cache hit")
 		return t, nil
 	}
 
@@ -101,19 +106,21 @@ func loadRemoteTemplate(ctx context.Context, d templateDependencies, url string,
 	}
 	Cache.Add(url, t)
 
+	d.Logger().WithField("template_url", url).Debug("Remote template loaded and cached")
 	return t, nil
 }
 
-func loadTemplate(filesystem fs.FS, name, pattern string, html bool, fallbackName ...string) (Template, error) {
+func loadTemplate(filesystem fs.FS, name, pattern string, html bool, logger *logrusx.Logger, fallbackName ...string) (Template, error) {
 	if t, found := Cache.Get(name); found {
 		return t, nil
 	}
 
 	matches, _ := fs.Glob(filesystem, name)
+
 	// make sure the file exists in the fs, otherwise try English fallback then built-in templates
 	if matches == nil {
 		if len(fallbackName) >= 2 && fallbackName[0] != "" {
-			return loadTemplate(filesystem, fallbackName[0], fallbackName[1], html)
+			return loadTemplate(filesystem, fallbackName[0], fallbackName[1], html, logger)
 		}
 		return loadBuiltInTemplate(filesystem, name, html)
 	}
@@ -157,7 +164,7 @@ func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 			return "", err
 		}
 	} else {
-		t, err = loadTemplate(filesystem, name, pattern, false, fallbackName...)
+		t, err = loadTemplate(filesystem, name, pattern, false, d.Logger(), fallbackName...)
 		if err != nil {
 			return "", err
 		}
@@ -167,6 +174,7 @@ func LoadText(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 	if err := t.Execute(&b, model); err != nil {
 		return "", err
 	}
+
 	return b.String(), nil
 }
 
@@ -179,7 +187,7 @@ func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 			return "", err
 		}
 	} else {
-		t, err = loadTemplate(filesystem, name, pattern, true, fallbackName...)
+		t, err = loadTemplate(filesystem, name, pattern, true, d.Logger(), fallbackName...)
 		if err != nil {
 			return "", err
 		}
@@ -189,5 +197,6 @@ func LoadHTML(ctx context.Context, d templateDependencies, filesystem fs.FS, nam
 	if err := t.Execute(&b, model); err != nil {
 		return "", err
 	}
+
 	return b.String(), nil
 }
