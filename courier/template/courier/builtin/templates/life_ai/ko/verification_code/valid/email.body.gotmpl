@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xác thực OTP</title>
+    <title>OTP 인증</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
@@ -19,16 +19,16 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">{{ index .TransientPayload "profile_name" }} 고객님,</p>{{ else }}<p style="margin: 0 0 16px;">고객님,</p>{{ end }}
 
                 {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
-                  <p style="margin: 0 0 16px;">Quý khách vừa yêu cầu commit Life Points từ ví của mình. Dưới đây là mã OTP (One-Time Password) để xác nhận giao dịch:</p>
+                  <p style="margin: 0 0 16px;">고객님께서는 지갑에서 Life Points Commit을 요청하셨습니다. 아래는 해당 거래를 확인하기 위한 일회용 비밀번호(OTP)입니다:</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.</p>
-                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
+                  <p style="margin: 0 0 16px;">{{ index .TransientPayload "action_description" }} 요청을 받았습니다.</p>
+                  <p style="margin: 0 0 16px;">보안을 위해 LIFE AI 앱에서 아래의 일회용 비밀번호(OTP)를 입력하여 확인해 주세요:</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>.</p>
-                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
+                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong>에서 인증 요청을 받았습니다.</p>
+                  <p style="margin: 0 0 16px;">보안을 위해 LIFE AI 앱에서 아래의 일회용 비밀번호(OTP)를 입력하여 확인해 주세요:</p>
                 {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
@@ -36,18 +36,18 @@
                 </p>
 
                 {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
-                  <p style="margin: 0 0 16px;"><strong>📌 Chi tiết giao dịch:</strong></p>
-                  <p style="margin: 0 0 16px;">Số lượng Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
-                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này để tiếp tục giao dịch Commit Life Points của quý khách.</p>
+                  <p style="margin: 0 0 16px;"><strong>거래 상세 정보:</strong></p>
+                  <p style="margin: 0 0 16px;">Commit 수량 (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
+                  <p style="margin: 0 0 16px;">이 OTP를 입력하여 Life Points Commit 거래를 진행해 주세요.</p>
                 {{ end }}
 
-                <p style="margin: 0 0 16px;">Mã OTP chỉ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút tới.</p>
+                <p style="margin: 0 0 16px;">OTP는 <strong>{{ .ExpiresInMinutes }}</strong>분 동안 유효합니다. 이 OTP를 다른 사람과 공유하지 마세요.</p>
 
-                <p style="margin: 0 0 16px;">Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> hoặc đổi mật khẩu tài khoản ngay lập tức.</p>
+                <p style="margin: 0 0 16px;">본인이 요청하지 않으셨다면 이 이메일을 무시하시고 즉시 <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>로 연락하시거나 비밀번호를 변경해 주세요.</p>
 
-                <p style="margin: 0 0 16px;">Cảm ơn bạn đã tin tưởng LIFE AI!</p>
+                <p style="margin: 0 0 16px;">LIFE AI를 선택해 주셔서 감사합니다!</p>
 
-                <p style="margin: 0 0 0;">Trân trọng,<br />Đội ngũ LIFE AI</p>
+                <p style="margin: 0 0 0;">감사합니다,<br />LIFE AI 팀</p>
               </td>
             </tr>
             <!-- Footer -->

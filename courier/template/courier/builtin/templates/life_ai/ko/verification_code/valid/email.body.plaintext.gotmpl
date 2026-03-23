@@ -1,0 +1,44 @@
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}{{ index .TransientPayload "profile_name" }} 고객님,{{ else }}고객님,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "amount") }}고객님께서는 지갑에서 Life Points Commit을 요청하셨습니다. 아래는 해당 거래를 확인하기 위한 일회용 비밀번호(OTP)입니다:
+
+{{ .VerificationCode }}
+
+거래 상세 정보:
+Commit 수량 (LP): {{ index .TransientPayload "amount" }}
+
+OTP는 {{ .ExpiresInMinutes }}분 동안 유효합니다. 이 OTP를 다른 사람과 공유하지 마세요.
+
+{{ .Tenant }}를 선택해 주셔서 감사합니다! 도움이 필요하시면 support@lifenetwork.ai로 문의해 주세요.
+
+감사합니다,
+{{ .Tenant }} 팀
+{{ else if and .TransientPayload (index .TransientPayload "action_description") }}{{ index .TransientPayload "action_description" }} 요청을 받았습니다.
+
+보안을 위해 {{ .Tenant }} 앱에서 아래의 일회용 비밀번호(OTP)를 입력하여 확인해 주세요:
+
+{{ .VerificationCode }}
+
+OTP는 {{ .ExpiresInMinutes }}분 동안 유효합니다.
+
+본인이 요청하지 않으셨다면 이 이메일을 무시하시고 즉시 support@lifenetwork.ai로 연락하시거나 비밀번호를 변경해 주세요.
+
+{{ .Tenant }}를 믿어 주셔서 감사합니다!
+
+감사합니다,
+{{ .Tenant }} 팀
+{{ else }}{{ .Tenant }}에서 인증 요청을 받았습니다.
+
+보안을 위해 {{ .Tenant }} 앱에서 아래의 일회용 비밀번호(OTP)를 입력하여 확인해 주세요:
+
+{{ .VerificationCode }}
+
+OTP는 {{ .ExpiresInMinutes }}분 동안 유효합니다.
+
+본인이 요청하지 않으셨다면 이 이메일을 무시하시고 즉시 support@lifenetwork.ai로 연락하시거나 비밀번호를 변경해 주세요.
+
+{{ .Tenant }}를 믿어 주셔서 감사합니다!
+
+감사합니다,
+{{ .Tenant }} 팀
+{{ end }}
