@@ -21,8 +21,8 @@
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
                 {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Yth. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Pelanggan Yang Terhormat,</p>{{ end }}
 
-                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
-                  <p style="margin: 0 0 16px;">Anda baru saja mengajukan permintaan Commit Life Points dari dompet Anda. Berikut adalah kode OTP untuk mengonfirmasi transaksi ini:</p>
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                  <p style="margin: 0 0 16px;">Anda telah mengajukan permintaan untuk melakukan Commit Life Points dari dompet Anda. Berikut adalah One-Time Password (OTP) untuk memverifikasi transaksi Anda:</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
                   <p style="margin: 0 0 16px;">Kami baru saja menerima permintaan {{ index .TransientPayload "action_description" }}.</p>
                   <p style="margin: 0 0 16px;">Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi LIFE AI:</p>
@@ -35,7 +35,7 @@
                   {{ .VerificationCode }}
                 </p>
 
-                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
                   <p style="margin: 0 0 16px;"><strong>📌 Detail transaksi:</strong></p>
                   <p style="margin: 0 0 16px;">Jumlah Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Silakan masukkan kode OTP ini untuk melanjutkan transaksi Commit Life Points Anda.</p>

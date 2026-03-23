@@ -1,0 +1,44 @@
+{{ if and .TransientPayload (index .TransientPayload "profile_name") }}เรียน คุณ {{ index .TransientPayload "profile_name" }},{{ else }}เรียน ลูกค้าผู้ทรงเกียรติ,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "amount") }}คุณได้ทำรายการ Commit Life Points จากกระเป๋าเงินของคุณ นี่คือรหัส OTP สำหรับยืนยันธุรกรรมของคุณ:
+
+{{ .VerificationCode }}
+
+รายละเอียดธุรกรรม:
+จำนวน Commit (LP): {{ index .TransientPayload "amount" }}
+
+รหัส OTP นี้มีอายุการใช้งาน {{ .ExpiresInMinutes }} นาที โปรดอย่าเปิดเผยรหัสนี้กับผู้อื่น
+
+ขอขอบคุณที่เลือกใช้ {{ .Tenant }}! หากต้องการความช่วยเหลือ โปรดติดต่อ support@lifenetwork.ai
+
+ขอแสดงความนับถือ,
+ทีมงาน {{ .Tenant }}
+{{ else if and .TransientPayload (index .TransientPayload "action_description") }}เราได้รับคำขอ {{ index .TransientPayload "action_description" }}
+
+เพื่อความปลอดภัย โปรดยืนยันตัวตนโดยกรอก One-Time Password (OTP) ด้านล่างในแอปพลิเคชัน {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+รหัส OTP นี้มีอายุการใช้งาน {{ .ExpiresInMinutes }} นาที
+
+หากคุณไม่ได้เป็นผู้ทำรายการนี้ โปรดเพิกเฉยต่ออีเมลนี้และติดต่อเราทันทีที่ support@lifenetwork.ai หรือเปลี่ยนรหัสผ่านของคุณโดยด่วน
+
+ขอขอบคุณที่ไว้วางใจ {{ .Tenant }}!
+
+ขอแสดงความนับถือ,
+ทีมงาน {{ .Tenant }}
+{{ else }}เราได้รับคำขอยืนยันตัวตนจาก {{ .Tenant }}
+
+เพื่อความปลอดภัย โปรดยืนยันตัวตนโดยกรอก One-Time Password (OTP) ด้านล่างในแอปพลิเคชัน {{ .Tenant }}:
+
+{{ .VerificationCode }}
+
+รหัส OTP นี้มีอายุการใช้งาน {{ .ExpiresInMinutes }} นาที
+
+หากคุณไม่ได้เป็นผู้ทำรายการนี้ โปรดเพิกเฉยต่ออีเมลนี้และติดต่อเราทันทีที่ support@lifenetwork.ai หรือเปลี่ยนรหัสผ่านของคุณโดยด่วน
+
+ขอขอบคุณที่ไว้วางใจ {{ .Tenant }}!
+
+ขอแสดงความนับถือ,
+ทีมงาน {{ .Tenant }}
+{{ end }}
