@@ -1,44 +1,108 @@
-{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Yth. {{ index .TransientPayload "profile_name" }},{{ else }}Pelanggan Yang Terhormat,{{ end }}
+{{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}Bapak/Ibu {{ index .TransientPayload "profile_name" }},{{ else }}Pelanggan Yang Terhormat,{{ end }}
+{{ else if and .TransientPayload (index .TransientPayload "profile_name") }}Yth. {{ index .TransientPayload "profile_name" }},{{ else }}Pelanggan Yang Terhormat,{{ end }}
 
-{{ if and .TransientPayload (index .TransientPayload "amount") }}Anda baru saja mengajukan permintaan Commit Life Points dari dompet Anda. Berikut adalah kode OTP untuk mengonfirmasi transaksi ini:
+{{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}Anda baru saja mengajukan permintaan Commit Life Points dari dompet Anda. Berikut adalah kode OTP untuk mengonfirmasi transaksi ini:
 
 {{ .VerificationCode }}
 
-📌 Detail transaksi:
+Detail transaksi:
 Jumlah Commit (LP): {{ index .TransientPayload "amount" }}
 
-OTP ini berlaku selama {{ .ExpiresInMinutes }} menit. Jangan bagikan kode ini kepada siapa pun demi keamanan akun Anda.
+Silakan masukkan kode OTP ini untuk melanjutkan transaksi Commit Life Points Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan kode ini kepada siapa pun.
 
 Terima kasih telah bersama {{ .Tenant }}! Jika memerlukan bantuan, silakan hubungi kami di support@lifenetwork.ai.
 
 Hormat kami,
-Tim dukungan {{ .Tenant }}
+Tim {{ .Tenant }}
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}Kami telah menerima permintaan untuk menarik{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT dari akun LIFE AI Anda. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.
+
+{{ .VerificationCode }}
+
+Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
+
+Terima kasih telah memilih LIFE AI! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di support@lifenetwork.ai.
+
+Salam hormat,
+Tim Dukungan LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}Kami telah menerima permintaan untuk menarik{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT dari akun LIFE Unity Anda. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.
+
+{{ .VerificationCode }}
+
+Masukkan OTP ini di aplikasi LIFE Unity untuk melanjutkan transaksi Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
+
+Terima kasih telah memilih LIFE Unity! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di support@lifenetwork.ai.
+
+Salam hormat,
+Tim Dukungan LIFE Unity
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "transfer_commit_unity") }}Kami telah menerima permintaan untuk mentransfer Life Points ke Life Unity. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.
+
+{{ .VerificationCode }}
+
+Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
+
+Terima kasih telah memilih LIFE AI! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di support@lifenetwork.ai.
+
+Salam hormat,
+Tim Dukungan LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan_transfer") }}Kami telah menerima permintaan untuk membayar pinjaman dan mentransfer. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.
+
+{{ .VerificationCode }}
+
+Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
+
+Terima kasih telah memilih LIFE AI! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di support@lifenetwork.ai.
+
+Salam hormat,
+Tim Dukungan LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}Kami telah menerima permintaan untuk membayar pinjaman. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.
+
+{{ .VerificationCode }}
+
+Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.
+
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
+
+Terima kasih telah memilih LIFE AI! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di support@lifenetwork.ai.
+
+Salam hormat,
+Tim Dukungan LIFE AI
 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}Kami baru saja menerima permintaan {{ index .TransientPayload "action_description" }}.
 
-Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi {{ .Tenant }}:
+Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi LIFE AI:
 
 {{ .VerificationCode }}
 
-OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan.
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
 
 Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di support@lifenetwork.ai atau segera ubah kata sandi akun Anda.
 
-Terima kasih telah mempercayai {{ .Tenant }}!
+Terima kasih telah mempercayai LIFE AI!
 
 Hormat kami,
-Tim {{ .Tenant }}
+Tim LIFE AI
 {{ else }}Kami baru saja menerima permintaan autentikasi dari {{ .Tenant }}.
 
-Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi {{ .Tenant }}:
+Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi LIFE AI:
 
 {{ .VerificationCode }}
 
-OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan.
+OTP hanya berlaku selama {{ .ExpiresInMinutes }} menit ke depan. Jangan bagikan OTP ini kepada siapa pun.
 
 Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di support@lifenetwork.ai atau segera ubah kata sandi akun Anda.
 
-Terima kasih telah mempercayai {{ .Tenant }}!
+Terima kasih telah mempercayai LIFE AI!
 
 Hormat kami,
-Tim {{ .Tenant }}
+Tim LIFE AI
 {{ end }}

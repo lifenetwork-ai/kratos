@@ -19,10 +19,22 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Yth. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Pelanggan Yang Terhormat,</p>{{ end }}
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+                  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Bapak/Ibu {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Pelanggan Yang Terhormat,</p>{{ end }}
+                {{ else if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Yth. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Pelanggan Yang Terhormat,</p>{{ end }}
 
                 {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
                   <p style="margin: 0 0 16px;">Anda telah mengajukan permintaan untuk melakukan Commit Life Points dari dompet Anda. Berikut adalah One-Time Password (OTP) untuk memverifikasi transaksi Anda:</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
+                  <p style="margin: 0 0 16px;">Kami telah menerima permintaan untuk menarik{{ if and .TransientPayload (index .TransientPayload "amount") }} <strong>{{ index .TransientPayload "amount" }}</strong>{{ end }} USDT dari akun LIFE AI Anda. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}
+                  <p style="margin: 0 0 16px;">Kami telah menerima permintaan untuk menarik{{ if and .TransientPayload (index .TransientPayload "amount") }} <strong>{{ index .TransientPayload "amount" }}</strong>{{ end }} USDT dari akun LIFE Unity Anda. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "transfer_commit_unity") }}
+                  <p style="margin: 0 0 16px;">Kami telah menerima permintaan untuk mentransfer Life Points ke Life Unity. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan_transfer") }}
+                  <p style="margin: 0 0 16px;">Kami telah menerima permintaan untuk membayar pinjaman dan mentransfer. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}
+                  <p style="margin: 0 0 16px;">Kami telah menerima permintaan untuk membayar pinjaman. Demi keamanan, silakan gunakan One-Time Password (OTP) di bawah ini untuk mengonfirmasi transaksi ini.</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
                   <p style="margin: 0 0 16px;">Kami baru saja menerima permintaan {{ index .TransientPayload "action_description" }}.</p>
                   <p style="margin: 0 0 16px;">Untuk keamanan, silakan konfirmasi dengan memasukkan One Time Password (OTP) berikut di aplikasi LIFE AI:</p>
@@ -36,18 +48,33 @@
                 </p>
 
                 {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
-                  <p style="margin: 0 0 16px;"><strong>📌 Detail transaksi:</strong></p>
+                  <p style="margin: 0 0 16px;"><strong>Detail transaksi:</strong></p>
                   <p style="margin: 0 0 16px;">Jumlah Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Silakan masukkan kode OTP ini untuk melanjutkan transaksi Commit Life Points Anda.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
+                  <p style="margin: 0 0 16px;">Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}
+                  <p style="margin: 0 0 16px;">Masukkan OTP ini di aplikasi LIFE Unity untuk melanjutkan transaksi Anda.</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "transfer_commit_unity") (eq (index .TransientPayload "verify_type") "pay_loan_transfer") (eq (index .TransientPayload "verify_type") "pay_loan")) }}
+                  <p style="margin: 0 0 16px;">Masukkan OTP ini di aplikasi LIFE AI untuk melanjutkan transaksi Anda.</p>
                 {{ end }}
 
-                <p style="margin: 0 0 16px;">OTP hanya berlaku selama <strong>{{ .ExpiresInMinutes }}</strong> menit ke depan.</p>
+                <p style="margin: 0 0 16px;">OTP hanya berlaku selama <strong>{{ .ExpiresInMinutes }}</strong> menit ke depan. Jangan bagikan OTP ini kepada siapa pun.</p>
 
-                <p style="margin: 0 0 16px;">Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> atau segera ubah kata sandi akun Anda.</p>
-
-                <p style="margin: 0 0 16px;">Terima kasih telah mempercayai LIFE AI!</p>
-
-                <p style="margin: 0 0 0;">Hormat kami,<br />Tim LIFE AI</p>
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                  <p style="margin: 0 0 16px;">Terima kasih telah memilih {{ .Tenant }}! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Hormat kami,<br />Tim {{ .Tenant }}</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+                  <p style="margin: 0 0 16px;">Terima kasih telah memilih {{ if eq (index .TransientPayload "verify_type") "withdraw_unity" }}LIFE Unity{{ else }}LIFE AI{{ end }}! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Salam hormat,<br />Tim Dukungan {{ if eq (index .TransientPayload "verify_type") "withdraw_unity" }}LIFE Unity{{ else }}LIFE AI{{ end }}</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "transfer_commit_unity") (eq (index .TransientPayload "verify_type") "pay_loan_transfer") (eq (index .TransientPayload "verify_type") "pay_loan")) }}
+                  <p style="margin: 0 0 16px;">Terima kasih telah memilih LIFE AI! Jika Anda membutuhkan bantuan, jangan ragu untuk menghubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Salam hormat,<br />Tim Dukungan LIFE AI</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">Jika Anda BUKAN yang mengajukan permintaan ini, abaikan email ini dan segera hubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> atau segera ubah kata sandi akun Anda.</p>
+                  <p style="margin: 0 0 16px;">Terima kasih telah mempercayai LIFE AI!</p>
+                  <p style="margin: 0 0 0;">Hormat kami,<br />Tim LIFE AI</p>
+                {{ end }}
               </td>
             </tr>
             <!-- Footer -->
