@@ -20,13 +20,13 @@
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
-                  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">เรียน คุณ {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">เรียน ลูกค้าผู้ทรงเกียรติ,</p>{{ end }}
+                  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">เรียน คุณ {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">เรียน ลูกค้าคนสำคัญ (หากบัญชีนี้ไม่มีชื่อ),</p>{{ end }}
                 {{ else }}
                   {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Dear Valued Customer,</p>{{ end }}
                 {{ end }}
 
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
-                  <p style="margin: 0 0 16px;">คุณเพิ่งทำรายการคอมมิตไลฟ์พอยต์จากกระเป๋าเงินของคุณ นี่คือรหัส OTP สำหรับยืนยันธุรกรรมของคุณ:</p>
+                  <p style="margin: 0 0 16px;">คุณเพิ่งทำรายการ Commit Life Points จากกระเป๋าเงินของคุณ นี่คือรหัส OTP สำหรับยืนยันธุรกรรมการ Commit ของคุณ:</p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;">You have just requested to commit Life Points from your wallet. Here is your One-Time Password (OTP) to verify your commitment transaction:</p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
@@ -53,8 +53,7 @@
 
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
                   <p style="margin: 0 0 16px;"><strong>รายละเอียดธุรกรรม:</strong></p>
-                  <p style="margin: 0 0 16px;">จำนวนไลฟ์พอยต์ที่คอมมิต (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
-                  <p style="margin: 0 0 16px;">โปรดกรอกรหัส OTP นี้เพื่อดำเนินการคอมมิตไลฟ์พอยต์ของคุณ</p>
+                  <p style="margin: 0 0 16px;">จำนวน Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;"><strong>Transaction details:</strong></p>
                   <p style="margin: 0 0 16px;">Commitment amount (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
@@ -75,7 +74,6 @@
 
                 {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
                   <p style="margin: 0 0 16px;">ขอขอบคุณที่เลือกใช้ {{ .Tenant }}! หากคุณต้องการความช่วยเหลือ โปรดติดต่อเราที่ <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a></p>
-                  <p style="margin: 0 0 0;">ขอแสดงความนับถือ,<br />ทีมงาน {{ .Tenant }}</p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
                   <p style="margin: 0 0 16px;">Thank you for choosing {{ .Tenant }}! If you need any assistance, feel free to reach out to us at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
                   <p style="margin: 0 0 0;">Best regards,<br />The {{ .Tenant }} Team</p>
