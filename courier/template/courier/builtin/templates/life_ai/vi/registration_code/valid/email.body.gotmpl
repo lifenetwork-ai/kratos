@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xac thuc OTP</title>
+    <title>Xác thực OTP</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
@@ -19,33 +19,33 @@
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
                 {{ if $renderAsVerification }}
-                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kinh gui {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kinh gui Quy khach hang,</p>{{ end }}
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
 
                 {{ if and .TransientPayload (index .TransientPayload "action_description") }}
-                  <p style="margin: 0 0 16px;">Chung toi vua nhan duoc yeu cau {{ index .TransientPayload "action_description" }}.</p>
-                  <p style="margin: 0 0 16px;">De bao mat, vui long xac nhan bang cach nhap Ma xac thuc mot lan (OTP) duoi day trong ung dung LIFE AI:</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;">Chung toi vua nhan duoc yeu cau xac thuc tu <strong>{{ .Tenant }}</strong>.</p>
-                  <p style="margin: 0 0 16px;">De bao mat, vui long xac nhan bang cach nhap Ma xac thuc mot lan (OTP) duoi day trong ung dung LIFE AI:</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ end }}
                 {{ else }}
-                <p style="margin: 0 0 16px;">Kinh gui Quy Khach hang,</p>
+                <p style="margin: 0 0 16px;">Kính gửi Quý Khách hàng,</p>
 
-                <p style="margin: 0 0 16px;">De xac thuc, vui long su dung ma OTP sau tu <strong>{{ .Tenant }}</strong>:</p>
+                <p style="margin: 0 0 16px;">Để xác thực, vui lòng sử dụng mã OTP sau từ <strong>{{ .Tenant }}</strong>:</p>
                 {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                   {{ .RegistrationCode }}
                 </p>
 
-                <p style="margin: 0 0 16px;">Ma OTP cua ban se co hieu luc trong <strong>{{ .ExpiresInMinutes }}</strong> phut. Vui long khong chia se ma nay voi bat ky ai.</p>
+                <p style="margin: 0 0 16px;">Mã OTP của bạn sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
 
                 {{ if $renderAsVerification }}
-                  <p style="margin: 0 0 16px;">Neu ban KHONG phai la nguoi thuc hien yeu cau nay, vui long bo qua email va lien he ngay voi chung toi tai <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> hoac doi mat khau tai khoan ngay lap tuc.</p>
-                  <p style="margin: 0 0 16px;">Cam on ban da tin tuong LIFE AI!</p>
-                  <p style="margin: 0 0 0;">Tran trong,<br />Doi ngu LIFE AI</p>
+                  <p style="margin: 0 0 16px;">Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> hoặc đổi mật khẩu tài khoản ngay lập tức.</p>
+                  <p style="margin: 0 0 16px;">Cảm ơn bạn đã tin tưởng LIFE AI!</p>
+                  <p style="margin: 0 0 0;">Trân trọng,<br />Đội ngũ LIFE AI</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> rat coi trong su bao mat tai khoan cua ban. Neu ban can ho tro, vui long lien he chung toi tai <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> rất coi trọng sự bảo mật tài khoản của bạn. Nếu bạn cần hỗ trợ, vui lòng liên hệ chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
                 {{ end }}
               </td>
             </tr>

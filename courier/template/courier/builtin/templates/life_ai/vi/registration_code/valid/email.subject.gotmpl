@@ -2,7 +2,7 @@
 {{- if and .TransientPayload (index .TransientPayload "subject") -}}
 {{ index .TransientPayload "subject" }}
 {{- else -}}
-{{ .Tenant }} OTP - Het han sau {{ .ExpiresInMinutes }} phut
+{{ .Tenant }} OTP - Hết hạn sau {{ .ExpiresInMinutes }} phút
 {{- end -}}
 {{- else -}}
 {{ .Tenant }} OTP

@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>OTP Verification / Xac thuc OTP</title>
+    <title>OTP Verification / Xác thực OTP</title>
   </head>
   <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6;">
     <p>Dear valued customer,</p>
@@ -41,21 +41,21 @@
 
     <hr style="margin: 32px 0; border: none; border-top: 1px solid #dddddd;" />
 
-    <p>Kinh gui Quy Khach hang,</p>
+    <p>Kính gửi Quý Khách hàng,</p>
 
     {{ if $renderAsVerification }}
     {{ if and .TransientPayload (index .TransientPayload "action_description") }}
-    <p>Chung toi vua nhan duoc yeu cau {{ index .TransientPayload "action_description" }}.</p>
+    <p>Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.</p>
     {{ else }}
-    <p>Chung toi vua nhan duoc yeu cau xac thuc tu <strong>{{ .Tenant }}</strong>.</p>
+    <p>Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>.</p>
     {{ end }}
 
     <p>
-      De bao mat, vui long xac nhan bang cach nhap ma OTP duoi day trong ung dung:
+      Để bảo mật, vui lòng xác nhận bằng cách nhập mã OTP dưới đây trong ứng dụng:
     </p>
     {{ else }}
     <p>
-      De xac thuc, vui long su dung ma OTP sau tu <strong>{{ .Tenant }}</strong>:
+      Để xác thực, vui lòng sử dụng mã OTP sau từ <strong>{{ .Tenant }}</strong>:
     </p>
     {{ end }}
 
@@ -64,13 +64,13 @@
     </p>
 
     <p>
-      Ma OTP cua ban se co hieu luc trong <strong>{{ .ExpiresInMinutes }}</strong> phut.<br />
-      Khong chia se OTP nay voi bat ky ai. <strong>{{ .Tenant }}</strong> rat coi trong su bao mat tai khoan cua ban.
+      Mã OTP của bạn sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút.<br />
+      Không chia sẻ OTP này với bất kỳ ai. <strong>{{ .Tenant }}</strong> rất coi trọng sự bảo mật tài khoản của bạn.
     </p>
 
     {{ if $renderAsVerification }}
     <p>
-      Neu ban khong thuc hien yeu cau nay, vui long bo qua email va lien he support@lifenetwork.ai.
+      Nếu bạn không thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ support@lifenetwork.ai.
     </p>
     {{ end }}
   </body>
