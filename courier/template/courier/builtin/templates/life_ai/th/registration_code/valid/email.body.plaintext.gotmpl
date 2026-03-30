@@ -8,19 +8,20 @@ For security, please confirm by entering the One-Time Password (OTP) below in th
 
 For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
 {{ end }}
-{{ else }}Dear Valued Customer,
+{{ else }}เรียน ลูกค้าคนสำคัญ,
 
-To authenticate, please use the following One Time Password (OTP) from {{ .Tenant }}:
+เพื่อยืนยันตัวตน กรุณาใช้รหัส OTP ต่อไปนี้จาก {{ .Tenant }}:
 {{ end }}
 
 {{ .RegistrationCode }}
 
-Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.
-Do not share this OTP with anyone.{{ if $renderAsVerification }}
+{{ if $renderAsVerification }}Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.
+Do not share this OTP with anyone.
 
 If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
 
 Thank you for trusting LIFE AI!
 
 Best regards,
-LIFE AI Team{{ else }} {{ .Tenant }} takes your account security very seriously.{{ end }}
+LIFE AI Team{{ else }}รหัส OTP ของคุณจะมีอายุ {{ .ExpiresInMinutes }} นาที
+กรุณาอย่าเปิดเผยรหัสนี้ให้ใครทราบ {{ .Tenant }} ให้ความสำคัญกับความปลอดภัยของบัญชีของคุณอย่างยิ่ง{{ end }}

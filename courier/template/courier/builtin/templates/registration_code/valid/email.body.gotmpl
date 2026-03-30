@@ -1,5 +1,19 @@
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+{{- if $renderAsVerification -}}
+[{{ .Tenant }}] Verify your account with the following code:
+
+{{ .RegistrationCode }}
+
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}We have received a request to {{ index .TransientPayload "action_description" }}.
+{{ else }}We have received a verification request from {{ .Tenant }}.
+{{ end }}
+For security, please enter this code in the app to confirm the request.
+
+If this was not you, do nothing. This code expires in {{ .ExpiresInMinutes }} minutes.
+{{- else -}}
 [{{ .Tenant }}] Complete your account registration with the following code:
 
 {{ .RegistrationCode }}
 
 This code expires in {{ .ExpiresInMinutes }} minutes.
+{{- end -}}

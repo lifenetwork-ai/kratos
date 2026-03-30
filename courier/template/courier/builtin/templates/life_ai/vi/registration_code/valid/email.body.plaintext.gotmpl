@@ -1,8 +1,26 @@
-Kính gửi Quý Khách hàng,
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+{{ if $renderAsVerification }}{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kinh gui {{ index .TransientPayload "profile_name" }},{{ else }}Kinh gui Quy khach hang,{{ end }}
 
-Để xác thực, vui lòng sử dụng mã OTP sau từ {{ .Tenant }}:
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}Chung toi vua nhan duoc yeu cau {{ index .TransientPayload "action_description" }}.
+
+De bao mat, vui long xac nhan bang cach nhap Ma xac thuc mot lan (OTP) duoi day trong ung dung LIFE AI:
+{{ else }}Chung toi vua nhan duoc yeu cau xac thuc tu {{ .Tenant }}.
+
+De bao mat, vui long xac nhan bang cach nhap Ma xac thuc mot lan (OTP) duoi day trong ung dung LIFE AI:
+{{ end }}
+{{ else }}Kinh gui Quy Khach hang,
+
+De xac thuc, vui long su dung ma OTP sau tu {{ .Tenant }}:
+{{ end }}
 
 {{ .RegistrationCode }}
 
-Mã OTP của bạn sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút.  
-Không chia sẻ OTP này với bất kỳ ai. {{ .Tenant }} rất coi trọng sự bảo mật tài khoản của bạn.
+Ma OTP cua ban se co hieu luc trong {{ .ExpiresInMinutes }} phut.
+Vui long khong chia se ma nay voi bat ky ai.{{ if $renderAsVerification }}
+
+Neu ban KHONG phai la nguoi thuc hien yeu cau nay, vui long bo qua email va lien he ngay voi chung toi tai support@lifenetwork.ai hoac doi mat khau tai khoan ngay lap tuc.
+
+Cam on ban da tin tuong LIFE AI!
+
+Tran trong,
+Doi ngu LIFE AI{{ else }} {{ .Tenant }} rat coi trong su bao mat tai khoan cua ban.{{ end }}

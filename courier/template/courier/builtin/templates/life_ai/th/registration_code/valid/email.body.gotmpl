@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Autentikasi OTP</title>
+    <title>ยืนยัน OTP</title>
   </head>
   <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
@@ -29,23 +29,23 @@
                   <p style="margin: 0 0 16px;">For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:</p>
                 {{ end }}
                 {{ else }}
-                <p style="margin: 0 0 16px;">Pelanggan Yang Terhormat,</p>
+                <p style="margin: 0 0 16px;">เรียน ลูกค้าคนสำคัญ,</p>
 
-                <p style="margin: 0 0 16px;">Untuk autentikasi, silakan gunakan One Time Password (OTP) berikut dari <strong>{{ .Tenant }}</strong>:</p>
+                <p style="margin: 0 0 16px;">เพื่อยืนยันตัวตน กรุณาใช้รหัส OTP ต่อไปนี้จาก <strong>{{ .Tenant }}</strong>:</p>
                 {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                   {{ .RegistrationCode }}
                 </p>
 
-                <p style="margin: 0 0 16px;">OTP Anda berlaku selama <strong>{{ .ExpiresInMinutes }}</strong> menit. Jangan bagikan OTP ini kepada siapa pun.</p>
-
                 {{ if $renderAsVerification }}
+                  <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
                   <p style="margin: 0 0 16px;">If you did NOT initiate this request, please ignore this email and contact us immediately at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> or change your password right away.</p>
                   <p style="margin: 0 0 16px;">Thank you for trusting LIFE AI!</p>
                   <p style="margin: 0 0 0;">Best regards,<br />LIFE AI Team</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> sangat menjaga keamanan akun Anda. Jika Anda memerlukan bantuan, silakan hubungi kami di <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 16px;">รหัส OTP ของคุณจะมีอายุ <strong>{{ .ExpiresInMinutes }}</strong> นาที กรุณาอย่าเปิดเผยรหัสนี้ให้ใครทราบ</p>
+                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> ให้ความสำคัญกับความปลอดภัยของบัญชีของคุณอย่างยิ่ง หากต้องการความช่วยเหลือ โปรดติดต่อ <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a></p>
                 {{ end }}
               </td>
             </tr>
