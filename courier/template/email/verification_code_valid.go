@@ -42,7 +42,7 @@ func (t *VerificationCodeValid) EmailRecipient() (string, error) {
 
 func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.m.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.m.TransientPayload,
 		"verification_code",
@@ -58,6 +58,7 @@ func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error
 		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Subject,
+		fallbackPath, fallbackGlob,
 	)
 
 	return strings.TrimSpace(subject), err
@@ -65,7 +66,7 @@ func (t *VerificationCodeValid) EmailSubject(ctx context.Context) (string, error
 
 func (t *VerificationCodeValid) EmailBody(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.m.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.m.TransientPayload,
 		"verification_code",
@@ -81,12 +82,13 @@ func (t *VerificationCodeValid) EmailBody(ctx context.Context) (string, error) {
 		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.HTML,
+		fallbackPath, fallbackGlob,
 	)
 }
 
 func (t *VerificationCodeValid) EmailBodyPlaintext(ctx context.Context) (string, error) {
 	traits := template.GetTraitsFromIdentity(t.m.Identity)
-	templatePath, templateGlob := template.GetTemplatePathAndGlob(
+	templatePath, templateGlob, fallbackPath, fallbackGlob := template.GetTemplatePathAndGlob(
 		traits,
 		t.m.TransientPayload,
 		"verification_code",
@@ -102,6 +104,7 @@ func (t *VerificationCodeValid) EmailBodyPlaintext(ctx context.Context) (string,
 		templateGlob,
 		t.m,
 		t.d.CourierConfig().CourierTemplatesVerificationCodeValid(ctx).Body.PlainText,
+		fallbackPath, fallbackGlob,
 	)
 }
 

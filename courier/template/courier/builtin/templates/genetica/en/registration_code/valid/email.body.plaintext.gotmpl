@@ -1,8 +1,16 @@
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
 Dear Valued Customer,
 
-To authenticate, please use the following One Time Password (OTP) from {{ .Tenant }}:
+{{ if $renderAsVerification }}{{ if and .TransientPayload (index .TransientPayload "action_description") }}We have received a request to {{ index .TransientPayload "action_description" }}.
+{{ else }}We have received a verification request from {{ .Tenant }}.
+{{ end }}
+For security, please confirm by entering the following One Time Password (OTP) in the app:
+{{ else }}To authenticate, please use the following One Time Password (OTP) from {{ .Tenant }}:
+{{ end }}
 
 {{ .RegistrationCode }}
 
 Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.  
-Do not share this OTP with anyone. {{ .Tenant }} takes your account security very seriously.
+Do not share this OTP with anyone. {{ .Tenant }} takes your account security very seriously.{{ if $renderAsVerification }}
+
+If you did not initiate this request, please ignore this email and contact support@lifenetwork.ai.{{ end }}

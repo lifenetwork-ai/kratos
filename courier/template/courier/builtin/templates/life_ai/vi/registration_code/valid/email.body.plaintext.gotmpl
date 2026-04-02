@@ -1,8 +1,26 @@
-Kính gửi Quý Khách hàng,
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+{{ if $renderAsVerification }}{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách hàng,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.
+
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:
+{{ else }}Chúng tôi vừa nhận được yêu cầu xác thực từ {{ .Tenant }}.
+
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:
+{{ end }}
+{{ else }}Kính gửi Quý Khách hàng,
 
 Để xác thực, vui lòng sử dụng mã OTP sau từ {{ .Tenant }}:
+{{ end }}
 
 {{ .RegistrationCode }}
 
-Mã OTP của bạn sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút.  
-Không chia sẻ OTP này với bất kỳ ai. {{ .Tenant }} rất coi trọng sự bảo mật tài khoản của bạn.
+Mã OTP của bạn sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút.
+Vui lòng không chia sẻ mã này với bất kỳ ai.{{ if $renderAsVerification }}
+
+Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại support@lifenetwork.ai hoặc đổi mật khẩu tài khoản ngay lập tức.
+
+Cảm ơn bạn đã tin tưởng LIFE AI!
+
+Trân trọng,
+Đội ngũ LIFE AI{{ else }} {{ .Tenant }} rất coi trọng sự bảo mật tài khoản của bạn.{{ end }}

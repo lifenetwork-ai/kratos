@@ -19,31 +19,62 @@
             <!-- Body content -->
             <tr>
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
-                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+                  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi Ông/Bà {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
+                {{ else if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Kính gửi {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Kính gửi Quý khách hàng,</p>{{ end }}
 
-                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
                   <p style="margin: 0 0 16px;">Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi đã nhận được yêu cầu rút{{ if and .TransientPayload (index .TransientPayload "amount") }} <strong>{{ index .TransientPayload "amount" }}</strong>{{ end }} USDT từ tài khoản LIFE AI của bạn. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi đã nhận được yêu cầu rút{{ if and .TransientPayload (index .TransientPayload "amount") }} <strong>{{ index .TransientPayload "amount" }}</strong>{{ end }} USDT từ tài khoản LIFE Unity của bạn. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "transfer_commit_unity") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi đã nhận được yêu cầu chuyển Life Points sang Life Unity. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan_transfer") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi đã nhận được yêu cầu thanh toán khoản vay và chuyển tiền. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}
+                  <p style="margin: 0 0 16px;">Chúng tôi đã nhận được yêu cầu thanh toán khoản vay. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.</p>
                 {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận giao dịch này.</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ else }}
-                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>. Vì lý do bảo mật, vui lòng sử dụng Mã xác thực một lần (OTP) bên dưới để xác nhận.</p>
+                  <p style="margin: 0 0 16px;">Chúng tôi vừa nhận được yêu cầu xác thực từ <strong>{{ .Tenant }}</strong>.</p>
+                  <p style="margin: 0 0 16px;">Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:</p>
                 {{ end }}
 
                 <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                   {{ .VerificationCode }}
                 </p>
 
-                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
-                  <p style="margin: 0 0 16px;"><strong>📌 Chi tiết giao dịch:</strong></p>
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                  <p style="margin: 0 0 16px;"><strong>Chi tiết giao dịch:</strong></p>
                   <p style="margin: 0 0 16px;">Số lượng Commit (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
-                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này để tiếp tục giao dịch Commit Life Points của quý khách.</p>
-                {{ else }}
-                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này trong ứng dụng {{ .Tenant }} để tiếp tục.</p>
+                  <p style="margin: 0 0 16px;">Vui lòng nhập mã OTP này để tiến hành Commit Life Points của bạn.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
+                  <p style="margin: 0 0 16px;">Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.</p>
+                {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}
+                  <p style="margin: 0 0 16px;">Vui lòng nhập OTP này vào ứng dụng LIFE Unity để tiến hành giao dịch của bạn.</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "transfer_commit_unity") (eq (index .TransientPayload "verify_type") "pay_loan_transfer") (eq (index .TransientPayload "verify_type") "pay_loan")) }}
+                  <p style="margin: 0 0 16px;">Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.</p>
                 {{ end }}
 
-                <p style="margin: 0 0 16px;">Mã OTP này sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Vui lòng không chia sẻ mã này với bất kỳ ai để đảm bảo an toàn cho tài khoản của quý khách.</p>
+                <p style="margin: 0 0 16px;">Mã OTP này sẽ có hiệu lực trong <strong>{{ .ExpiresInMinutes }}</strong> phút. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
 
-                <p style="margin: 0 0 16px;">Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                  <p style="margin: 0 0 16px;">Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Trân trọng,<br />Nhóm hỗ trợ {{ .Tenant }}</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+                  <p style="margin: 0 0 16px;">Cảm ơn bạn đã lựa chọn {{ if eq (index .TransientPayload "verify_type") "withdraw_unity" }}LIFE Unity{{ else }}LIFE AI{{ end }}! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Trân trọng,<br />Nhóm hỗ trợ {{ if eq (index .TransientPayload "verify_type") "withdraw_unity" }}LIFE Unity{{ else }}LIFE AI{{ end }}</p>
+                {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "transfer_commit_unity") (eq (index .TransientPayload "verify_type") "pay_loan_transfer") (eq (index .TransientPayload "verify_type") "pay_loan")) }}
+                  <p style="margin: 0 0 16px;">Cảm ơn bạn đã lựa chọn LIFE AI! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
+                  <p style="margin: 0 0 0;">Trân trọng,<br />Nhóm hỗ trợ LIFE AI</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> hoặc đổi mật khẩu tài khoản ngay lập tức.</p>
+                  <p style="margin: 0 0 16px;">Cảm ơn bạn đã tin tưởng LIFE AI!</p>
+                  <p style="margin: 0 0 0;">Trân trọng,<br />Đội ngũ LIFE AI</p>
+                {{ end }}
               </td>
             </tr>
             <!-- Footer -->
