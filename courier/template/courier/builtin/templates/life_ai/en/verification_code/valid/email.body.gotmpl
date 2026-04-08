@@ -21,7 +21,7 @@
               <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
                 {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Dear Valued Customer,</p>{{ end }}
 
-                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
                   <p style="margin: 0 0 16px;">You have just requested to commit Life Points from your wallet. Here is your One-Time Password (OTP) to verify your commitment transaction:</p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}
                   <p style="margin: 0 0 16px;">We have received a request to withdraw{{ if and .TransientPayload (index .TransientPayload "amount") }} <strong>{{ index .TransientPayload "amount" }}</strong>{{ end }} USDT from your LIFE AI account. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.</p>
@@ -33,8 +33,8 @@
                   <p style="margin: 0 0 16px;">We have received a request to pay loan and transfer. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.</p>
                 {{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}
                   <p style="margin: 0 0 16px;">We have received a request to pay loan. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.</p>
-                {{ else if and .TransientPayload (index .TransientPayload "action_description") }}
-                  <p style="margin: 0 0 16px;">We have received a request to {{ index .TransientPayload "action_description" }}.</p>
+                {{ else if and .TransientPayload (or (index .TransientPayload "action_description") (eq (index .TransientPayload "verify_type") "commit_unity")) }}
+                  <p style="margin: 0 0 16px;">We have received a request to {{ if eq (index .TransientPayload "verify_type") "commit_unity" }}commit Life Points from Main wallet{{ else }}{{ index .TransientPayload "action_description" }}{{ end }}.</p>
                   <p style="margin: 0 0 16px;">For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:</p>
                 {{ else }}
                   <p style="margin: 0 0 16px;">We have received a verification request from <strong>{{ .Tenant }}</strong>.</p>
@@ -45,7 +45,7 @@
                   {{ .VerificationCode }}
                 </p>
 
-                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
                   <p style="margin: 0 0 16px;"><strong>Transaction details:</strong></p>
                   <p style="margin: 0 0 16px;">Commitment amount (LP): <strong>{{ index .TransientPayload "amount" }}</strong></p>
                   <p style="margin: 0 0 16px;">Please enter this OTP to proceed with your Life Points commitment.</p>
@@ -57,9 +57,13 @@
                   <p style="margin: 0 0 16px;">Please enter this OTP in the LIFE AI app to proceed with your transaction.</p>
                 {{ end }}
 
-                <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}
+                  <p style="margin: 0 0 16px;">This OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes.</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
+                {{ end }}
 
-                {{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "commit_unity") (eq (index .TransientPayload "verify_type") "commit_lifeai")) }}
+                {{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}
                   <p style="margin: 0 0 16px;">Thank you for choosing {{ .Tenant }}! If you need any assistance, feel free to reach out to us at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a>.</p>
                   <p style="margin: 0 0 0;">Best regards,<br />The {{ .Tenant }} Team</p>
                 {{ else if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}

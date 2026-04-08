@@ -37,7 +37,7 @@ For LIFE AI verification-code templates, `transient_payload.verify_type` is used
 Known verification types currently used by the LIFE AI verification-code templates:
 
 - `commit_lifeai`
-- `commit_unity`
+- `commit_unity` (renders the generic action-confirmation copy with a built-in action description; callers do not need to send `action_description`)
 - `withdraw_main_wallet`
 - `withdraw_unity`
 - `transfer_commit_unity`
