@@ -70,3 +70,4 @@ __debug_bin
 # LLM
 .claude/
 .serena
+.gitnexus
