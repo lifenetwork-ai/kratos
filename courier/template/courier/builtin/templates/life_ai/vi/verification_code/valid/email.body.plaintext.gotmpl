@@ -1,44 +1,108 @@
-{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách hàng,{{ end }}
+{{ if and .TransientPayload (or (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") (eq (index .TransientPayload "verify_type") "withdraw_unity")) }}
+  {{ if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi Ông/Bà {{ index .TransientPayload "profile_name" }},{{ else }}Kính gửi Quý khách hàng,{{ end }}
+{{ else if and .TransientPayload (index .TransientPayload "profile_name") }}Kính gửi {{ index .TransientPayload "profile_name" }},{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}Kính gửi Quý khách,{{ else }}Kính gửi Quý khách hàng,{{ end }}
 
-{{ if and .TransientPayload (index .TransientPayload "amount") }}Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:
+{{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}Quý khách vừa thực hiện yêu cầu Commit Life Points từ ví của mình. Dưới đây là mã OTP để xác nhận giao dịch này:
 
 {{ .VerificationCode }}
 
-📌 Chi tiết giao dịch:
+Chi tiết giao dịch:
 Số lượng Commit (LP): {{ index .TransientPayload "amount" }}
 
-Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai để đảm bảo an toàn cho tài khoản của quý khách.
+Vui lòng nhập mã OTP này để tiến hành Commit Life Points của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
 
 Cảm ơn quý khách đã đồng hành cùng {{ .Tenant }}! Nếu cần hỗ trợ, vui lòng liên hệ chúng tôi qua support@lifenetwork.ai.
 
 Trân trọng,
 Nhóm hỗ trợ {{ .Tenant }}
-{{ else if and .TransientPayload (index .TransientPayload "action_description") }}Chúng tôi vừa nhận được yêu cầu {{ index .TransientPayload "action_description" }}.
-
-Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng {{ .Tenant }}:
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}Chúng tôi đã nhận được yêu cầu rút{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT từ tài khoản LIFE AI của bạn. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.
 
 {{ .VerificationCode }}
 
-Mã OTP chỉ có hiệu lực trong {{ .ExpiresInMinutes }} phút tới.
+Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
+
+Cảm ơn bạn đã lựa chọn LIFE AI! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}Chúng tôi đã nhận được yêu cầu rút{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT từ tài khoản LIFE Unity của bạn. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.
+
+{{ .VerificationCode }}
+
+Vui lòng nhập OTP này vào ứng dụng LIFE Unity để tiến hành giao dịch của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
+
+Cảm ơn bạn đã lựa chọn LIFE Unity! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ LIFE Unity
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "transfer_commit_unity") }}Chúng tôi đã nhận được yêu cầu chuyển Life Points sang Life Unity. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.
+
+{{ .VerificationCode }}
+
+Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
+
+Cảm ơn bạn đã lựa chọn LIFE AI! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan_transfer") }}Chúng tôi đã nhận được yêu cầu thanh toán khoản vay và chuyển tiền. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.
+
+{{ .VerificationCode }}
+
+Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
+
+Cảm ơn bạn đã lựa chọn LIFE AI! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ LIFE AI
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}Chúng tôi đã nhận được yêu cầu thanh toán khoản vay. Vì lý do bảo mật, vui lòng sử dụng Mật khẩu một lần (OTP) được cung cấp bên dưới để xác nhận giao dịch này.
+
+{{ .VerificationCode }}
+
+Vui lòng nhập OTP này vào ứng dụng LIFE AI để tiến hành giao dịch của bạn.
+
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
+
+Cảm ơn bạn đã lựa chọn LIFE AI! Nếu bạn cần bất kỳ sự trợ giúp nào, vui lòng liên hệ với chúng tôi theo địa chỉ support@lifenetwork.ai.
+
+Trân trọng,
+Nhóm hỗ trợ LIFE AI
+{{ else if and .TransientPayload (or (index .TransientPayload "action_description") (eq (index .TransientPayload "verify_type") "commit_unity")) }}Chúng tôi vừa nhận được yêu cầu {{ if eq (index .TransientPayload "verify_type") "commit_unity" }}commit Life Points từ Ví chính{{ else }}{{ index .TransientPayload "action_description" }}{{ end }}.
+
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:
+
+{{ .VerificationCode }}
+
+{{ if eq (index .TransientPayload "verify_type") "commit_unity" }}Mã OTP chỉ có hiệu lực trong {{ .ExpiresInMinutes }} phút tới.{{ else }}Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.{{ end }}
 
 Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại support@lifenetwork.ai hoặc đổi mật khẩu tài khoản ngay lập tức.
 
-Cảm ơn bạn đã tin tưởng {{ .Tenant }}!
+Cảm ơn bạn đã tin tưởng LIFE AI!
 
 Trân trọng,
-Đội ngũ {{ .Tenant }}
+Đội ngũ LIFE AI
 {{ else }}Chúng tôi vừa nhận được yêu cầu xác thực từ {{ .Tenant }}.
 
-Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng {{ .Tenant }}:
+Để bảo mật, vui lòng xác nhận bằng cách nhập Mã xác thực một lần (OTP) dưới đây trong ứng dụng LIFE AI:
 
 {{ .VerificationCode }}
 
-Mã OTP chỉ có hiệu lực trong {{ .ExpiresInMinutes }} phút tới.
+Mã OTP này sẽ có hiệu lực trong {{ .ExpiresInMinutes }} phút. Vui lòng không chia sẻ mã này với bất kỳ ai.
 
 Nếu bạn KHÔNG phải là người thực hiện yêu cầu này, vui lòng bỏ qua email và liên hệ ngay với chúng tôi tại support@lifenetwork.ai hoặc đổi mật khẩu tài khoản ngay lập tức.
 
-Cảm ơn bạn đã tin tưởng {{ .Tenant }}!
+Cảm ơn bạn đã tin tưởng LIFE AI!
 
 Trân trọng,
-Đội ngũ {{ .Tenant }}
+Đội ngũ LIFE AI
 {{ end }}

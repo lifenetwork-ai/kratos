@@ -1,3 +1,4 @@
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,9 +8,21 @@
   <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6;">
     <p>Dear Valued Customer,</p>
 
+    {{ if $renderAsVerification }}
+    {{ if and .TransientPayload (index .TransientPayload "action_description") }}
+    <p>We have received a request to {{ index .TransientPayload "action_description" }}.</p>
+    {{ else }}
+    <p>We have received a verification request from <strong>{{ .Tenant }}</strong>.</p>
+    {{ end }}
+
+    <p>
+      For security, please confirm by entering the following One Time Password (OTP) in the app:
+    </p>
+    {{ else }}
     <p>
       To authenticate, please use the following One Time Password (OTP) from <strong>{{ .Tenant }}</strong>:
     </p>
+    {{ end }}
 
     <p style="font-size: 24px; font-weight: bold; color: #2c3e50;">
       {{ .RegistrationCode }}
@@ -19,5 +32,11 @@
       Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes.<br />
       Do not share this OTP with anyone. <strong>{{ .Tenant }}</strong> takes your account security very seriously.
     </p>
+
+    {{ if $renderAsVerification }}
+    <p>
+      If you did not initiate this request, please ignore this email and contact support@lifenetwork.ai.
+    </p>
+    {{ end }}
   </body>
 </html>

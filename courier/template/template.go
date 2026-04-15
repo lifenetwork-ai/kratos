@@ -11,4 +11,5 @@ import (
 type Dependencies interface {
 	CourierConfig() config.CourierConfigs
 	x.HTTPClientProvider
+	x.LoggingProvider
 }

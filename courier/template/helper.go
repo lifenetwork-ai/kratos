@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/ory/x/logrusx"
 )
 
 const (
@@ -67,21 +69,64 @@ func getLangFromTraits(traits map[string]interface{}) string {
 }
 
 // GetTemplatePathAndGlob constructs the template path and glob pattern based on traits, transient payload, action, status, and template name.
+// It returns the primary path/glob for the requested language and a fallback path/glob using "en".
+// If the requested language is already "en", fallback values are empty.
 func GetTemplatePathAndGlob(
 	traits map[string]interface{},
 	transientPayload map[string]interface{},
 	action string, // e.g. "registration_code"
 	status string, // e.g. "valid" or "invalid"
 	templateName string, // e.g. "email.subject"
-) (string, string) {
+) (templatePath, templateGlob, fallbackPath, fallbackGlob string) {
+	return GetTemplatePathAndGlobWithLogger(nil, traits, transientPayload, action, status, templateName)
+}
+
+// GetTemplatePathAndGlobWithLogger constructs the template path and glob pattern with debug logging.
+func GetTemplatePathAndGlobWithLogger(
+	logger *logrusx.Logger,
+	traits map[string]interface{},
+	transientPayload map[string]interface{},
+	action string, // e.g. "registration_code"
+	status string, // e.g. "valid" or "invalid"
+	templateName string, // e.g. "email.subject"
+) (templatePath, templateGlob, fallbackPath, fallbackGlob string) {
 	lang := getLangFromTraits(traits)
 	tenant := getTenantFromTraits(traits, transientPayload)
 
-	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
-	templatePath := fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
-	templateGlob := fmt.Sprintf("%s/%s.*", dir, templateName)
+	if logger != nil {
+		logger.
+			WithField("traits", traits).
+			WithField("transient_payload", transientPayload).
+			WithField("extracted_lang", lang).
+			WithField("extracted_tenant", tenant).
+			WithField("action", action).
+			WithField("status", status).
+			WithField("template_name", templateName).
+			Debug("Resolving template path from traits")
+	}
 
-	return templatePath, templateGlob
+	dir := fmt.Sprintf("%s/%s/%s/%s", tenant, lang, action, status)
+	templatePath = fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
+	templateGlob = fmt.Sprintf("%s/%s.*", dir, templateName)
+	templatePath = fmt.Sprintf("%s/%s.gotmpl", dir, templateName)
+	templateGlob = fmt.Sprintf("%s/%s.*", dir, templateName)
+
+	if lang != "en" {
+		fallbackDir := fmt.Sprintf("%s/%s/%s/%s", tenant, "en", action, status)
+		fallbackPath = fmt.Sprintf("%s/%s.gotmpl", fallbackDir, templateName)
+		fallbackGlob = fmt.Sprintf("%s/%s.*", fallbackDir, templateName)
+	}
+
+	if logger != nil {
+		logger.
+			WithField("template_path", templatePath).
+			WithField("template_glob", templateGlob).
+			WithField("fallback_path", fallbackPath).
+			WithField("fallback_glob", fallbackGlob).
+			Debug("Template path resolved")
+	}
+
+	return
 }
 
 // GetTraitsFromIdentity safely extracts the traits object from a Kratos identity-like map.

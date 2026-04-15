@@ -1,8 +1,26 @@
-Dear Valued Customer,
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+{{ if $renderAsVerification }}{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},{{ else }}Dear Valued Customer,{{ end }}
+
+{{ if and .TransientPayload (index .TransientPayload "action_description") }}We have received a request to {{ index .TransientPayload "action_description" }}.
+
+For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
+{{ else }}We have received a verification request from {{ .Tenant }}.
+
+For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
+{{ end }}
+{{ else }}Dear Valued Customer,
 
 To authenticate, please use the following One Time Password (OTP) from {{ .Tenant }}:
+{{ end }}
 
 {{ .RegistrationCode }}
 
-Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.  
-Do not share this OTP with anyone. {{ .Tenant }} takes your account security very seriously.
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes.
+Do not share this OTP with anyone.{{ if $renderAsVerification }}
+
+If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
+
+Thank you for trusting LIFE AI!
+
+Best regards,
+LIFE AI Team{{ else }} {{ .Tenant }} takes your account security very seriously.{{ end }}

@@ -1,1 +1,9 @@
+{{- if and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+{{- if and .TransientPayload (index .TransientPayload "subject") -}}
+{{ index .TransientPayload "subject" }}
+{{- else -}}
+{{ .Tenant }} OTP verification
+{{- end -}}
+{{- else -}}
 {{ .Tenant }} OTP
+{{- end -}}
