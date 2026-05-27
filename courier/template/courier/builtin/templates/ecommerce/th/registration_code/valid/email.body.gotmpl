@@ -1,0 +1,62 @@
+{{- $renderAsVerification := and .TransientPayload (index .TransientPayload "render_as_verification") -}}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ยืนยัน OTP</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
+      <tr>
+        <td align="center" style="padding: 20px 0;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; max-width: 600px;">
+            <tr>
+              <td align="center" style="padding: 30px 20px;">
+                <img src="https://s3-ap-southeast-1.amazonaws.com/genetica.email-templates/build/assets/images/icons/life-ai.logo.png" alt="LIFE AI" width="60" style="display: block;" />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 30px 40px; color: #333333; font-size: 15px; line-height: 1.6;">
+                {{ if $renderAsVerification }}
+                {{ if and .TransientPayload (index .TransientPayload "profile_name") }}<p style="margin: 0 0 16px;">Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},</p>{{ else }}<p style="margin: 0 0 16px;">Dear Valued Customer,</p>{{ end }}
+
+                {{ if and .TransientPayload (index .TransientPayload "action_description") }}
+                  <p style="margin: 0 0 16px;">We have received a request to {{ index .TransientPayload "action_description" }}.</p>
+                  <p style="margin: 0 0 16px;">For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">We have received a verification request from <strong>{{ .Tenant }}</strong>.</p>
+                  <p style="margin: 0 0 16px;">For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:</p>
+                {{ end }}
+                {{ else }}
+                <p style="margin: 0 0 16px;">เรียน ลูกค้าคนสำคัญ,</p>
+
+                <p style="margin: 0 0 16px;">เพื่อยืนยันตัวตน กรุณาใช้รหัส OTP ต่อไปนี้จาก <strong>{{ .Tenant }}</strong>:</p>
+                {{ end }}
+
+                <p style="text-align: center; font-size: 36px; font-weight: bold; letter-spacing: 6px; color: #1a1a2e; margin: 24px 0; padding: 16px 0; border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+                  {{ .RegistrationCode }}
+                </p>
+
+                {{ if $renderAsVerification }}
+                  <p style="margin: 0 0 16px;">Your OTP will be valid for <strong>{{ .ExpiresInMinutes }}</strong> minutes. Do not share this OTP with anyone.</p>
+                  <p style="margin: 0 0 16px;">If you did NOT initiate this request, please ignore this email and contact us immediately at <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a> or change your password right away.</p>
+                  <p style="margin: 0 0 16px;">Thank you for trusting LIFE AI!</p>
+                  <p style="margin: 0 0 0;">Best regards,<br />LIFE AI Team</p>
+                {{ else }}
+                  <p style="margin: 0 0 16px;">รหัส OTP ของคุณจะมีอายุ <strong>{{ .ExpiresInMinutes }}</strong> นาที กรุณาอย่าเปิดเผยรหัสนี้ให้ใครทราบ</p>
+                  <p style="margin: 0 0 16px;"><strong>{{ .Tenant }}</strong> ให้ความสำคัญกับความปลอดภัยของบัญชีของคุณอย่างยิ่ง หากต้องการความช่วยเหลือ โปรดติดต่อ <a href="mailto:support@lifenetwork.ai" style="color: #4caf50; text-decoration: none;">support@lifenetwork.ai</a></p>
+                {{ end }}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px 40px; background-color: #fafafa; color: #999999; font-size: 12px; text-align: center; border-top: 1px solid #eeeeee;">
+                <p style="margin: 0;">&copy; {{ .Tenant }}. All rights reserved.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

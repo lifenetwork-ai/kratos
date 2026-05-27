@@ -1,0 +1,120 @@
+{{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}{{ if and .TransientPayload (index .TransientPayload "profile_name") }}안녕하세요, {{ index .TransientPayload "profile_name" }} 님,{{ else }}안녕하세요, 고객님,{{ end }}{{ else }}{{ if and .TransientPayload (index .TransientPayload "profile_name") }}Dear Mr./Ms. {{ index .TransientPayload "profile_name" }},{{ else }}Dear Valued Customer,{{ end }}{{ end }}
+
+{{ if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_lifeai") }}귀하는 방금 지갑에서 Commit Life Points를 요청하셨습니다. 다음은 Commit 거래를 확인하기 위한 OTP입니다:
+
+{{ .VerificationCode }}
+
+거래 상세 정보:
+Commit 수량 (LP): {{ index .TransientPayload "amount" }}
+
+이 OTP를 입력하여 Life Points Commit을 진행해 주세요.
+
+OTP는 {{ .ExpiresInMinutes }}분 동안 유효합니다. 이 OTP를 다른 사람과 공유하지 마세요.
+
+{{ .Tenant }}를 선택해 주셔서 감사합니다! 도움이 필요하시면 support@lifenetwork.ai로 문의해 주세요.
+
+감사합니다,
+{{ .Tenant }} 팀
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "commit_unity") }}We have received a request to commit Life Points from Main wallet.
+
+For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
+
+{{ .VerificationCode }}
+
+This OTP will be valid for {{ .ExpiresInMinutes }} minutes.
+
+If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
+
+Thank you for trusting LIFE AI!
+
+Best regards,
+LIFE AI Team
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_main_wallet") }}We have received a request to withdraw{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT from your LIFE AI account. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.
+
+{{ .VerificationCode }}
+
+Please enter this OTP in the LIFE AI app to proceed with your transaction.
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+Thank you for choosing LIFE AI! If you need any assistance, feel free to reach out to us at support@lifenetwork.ai.
+
+Best regards,
+LIFE AI Support Team
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "withdraw_unity") }}We have received a request to withdraw{{ if and .TransientPayload (index .TransientPayload "amount") }} {{ index .TransientPayload "amount" }}{{ end }} USDT from your LIFE Unity account. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.
+
+{{ .VerificationCode }}
+
+Please enter this OTP in the LIFE Unity app to proceed with your transaction.
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+Thank you for choosing LIFE Unity! If you need any assistance, feel free to reach out to us at support@lifenetwork.ai.
+
+Best regards,
+LIFE Unity Support Team
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "transfer_commit_unity") }}We have received a request to transfer Life Points to Life Unity. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.
+
+{{ .VerificationCode }}
+
+Please enter this OTP in the LIFE AI app to proceed with your transaction.
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+Thank you for choosing LIFE AI! If you need any assistance, feel free to reach out to us at support@lifenetwork.ai.
+
+Best regards,
+LIFE AI Support Team
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan_transfer") }}We have received a request to pay loan and transfer. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.
+
+{{ .VerificationCode }}
+
+Please enter this OTP in the LIFE AI app to proceed with your transaction.
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+Thank you for choosing LIFE AI! If you need any assistance, feel free to reach out to us at support@lifenetwork.ai.
+
+Best regards,
+LIFE AI Support Team
+{{ else if and .TransientPayload (eq (index .TransientPayload "verify_type") "pay_loan") }}We have received a request to pay loan. For security reasons, please use the One-Time Password (OTP) provided below to confirm this transaction.
+
+{{ .VerificationCode }}
+
+Please enter this OTP in the LIFE AI app to proceed with your transaction.
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+Thank you for choosing LIFE AI! If you need any assistance, feel free to reach out to us at support@lifenetwork.ai.
+
+Best regards,
+LIFE AI Support Team
+{{ else if and .TransientPayload (index .TransientPayload "action_description") }}We have received a request to {{ index .TransientPayload "action_description" }}.
+
+For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
+
+{{ .VerificationCode }}
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
+
+Thank you for trusting LIFE AI!
+
+Best regards,
+LIFE AI Team
+{{ else }}We have received a verification request from {{ .Tenant }}.
+
+For security, please confirm by entering the One-Time Password (OTP) below in the LIFE AI app:
+
+{{ .VerificationCode }}
+
+Your OTP will be valid for {{ .ExpiresInMinutes }} minutes. Do not share this OTP with anyone.
+
+If you did NOT initiate this request, please ignore this email and contact us immediately at support@lifenetwork.ai or change your password right away.
+
+Thank you for trusting LIFE AI!
+
+Best regards,
+LIFE AI Team
+{{ end }}
