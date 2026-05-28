@@ -29,6 +29,8 @@ COPY --from=builder /usr/bin/kratos /usr/bin/kratos
 
 # Use envsubst from gettext
 COPY config/kratos.yml /etc/config/kratos_template.yml
+RUN mkdir -p /etc/config/kratos
+COPY config/oidc.life-iam.jsonnet /etc/config/kratos/oidc.life-iam.jsonnet
 COPY stub /stub
 COPY entrypoint.sh /entrypoint.sh
 

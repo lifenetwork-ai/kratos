@@ -14,12 +14,28 @@ selfservice:
   default_browser_return_url: ${SELFSERVICE_URL}/welcome
   allowed_return_urls:
     - ${SELFSERVICE_URL}
+    - ${IAM_IDP_ISSUER_URL}/oauth2/kratos-return
 
   methods:
     code:
       config:
         lifespan: 5m
       passwordless_enabled: true
+    oidc:
+      enabled: true
+      config:
+        providers:
+          - id: life-iam
+            provider: generic
+            client_id: iam-token-exchange
+            client_secret: ${IAM_IDP_CLIENT_SECRET}
+            issuer_url: ${IAM_IDP_ISSUER_URL}
+            mapper_url: file:///etc/config/kratos/oidc.life-iam.jsonnet
+            scope:
+              - openid
+              - email
+              - phone
+              - profile
     password:
       enabled: false
     profile:
@@ -110,5 +126,4 @@ courier:
         headers:
           Content-Type: application/json
         body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgVG86IGN0eC5yZWNpcGllbnQsCiAgQm9keTogY3R4LmJvZHksCn0=
-
 
