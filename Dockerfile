@@ -27,7 +27,9 @@ RUN apt-get update && \
 
 COPY --from=builder /usr/bin/kratos /usr/bin/kratos
 
-# Use envsubst from gettext
+# Use envsubst from gettext. Copy all bundled config files so deployments can
+# select an alternate file/template with KRATOS_CONFIG_* env vars.
+COPY config/*.yml /etc/config/
 COPY config/kratos.yml /etc/config/kratos_template.yml
 RUN mkdir -p /etc/config/kratos
 COPY config/oidc.life-iam.jsonnet /etc/config/kratos/oidc.life-iam.jsonnet
