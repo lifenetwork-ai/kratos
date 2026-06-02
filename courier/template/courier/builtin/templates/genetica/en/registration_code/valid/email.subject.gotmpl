@@ -2,8 +2,8 @@
 {{- if and .TransientPayload (index .TransientPayload "subject") -}}
 {{ index .TransientPayload "subject" }}
 {{- else -}}
-[{{ .Tenant }}] Use code {{ .RegistrationCode }} to verify your account
+OTP for {{ .Tenant }} verification
 {{- end -}}
 {{- else -}}
-[{{ .Tenant }}] Use code {{ .RegistrationCode }} to complete your account registration
+OTP for {{ .Tenant }} registration
 {{- end -}}
