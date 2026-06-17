@@ -11,6 +11,7 @@ import (
 const (
 	TenantLifeAI   = "LIFE AI"
 	TenantGenetica = "GENETICA"
+	TenantEcommerce = "Life AI VN"
 )
 
 // getTenantFromTraits tries to extract the tenant name from traits or transient payload.
@@ -49,6 +50,8 @@ func normalizeTenant(t string) string {
 		return TenantLifeAI
 	case "genetica":
 		return TenantGenetica
+	case "ecommerce":
+		return TenantEcommerce
 	default:
 		return t
 	}

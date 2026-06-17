@@ -1,0 +1,129 @@
+dsn: memory
+
+serve:
+  public:
+    base_url: http://127.0.0.1:4433/
+    cors:
+      enabled: true
+      allowed_origins:
+        - ${SELFSERVICE_URL}
+  admin:
+    base_url: http://kratos:4434/
+
+selfservice:
+  default_browser_return_url: ${SELFSERVICE_URL}/welcome
+  allowed_return_urls:
+    - ${SELFSERVICE_URL}
+    - ${IAM_IDP_ISSUER_URL}/oauth2/kratos-return
+
+  methods:
+    code:
+      config:
+        lifespan: 5m
+      passwordless_enabled: true
+    oidc:
+      enabled: true
+      config:
+        providers:
+          - id: life-iam
+            provider: generic
+            client_id: iam-token-exchange
+            client_secret: ${IAM_IDP_CLIENT_SECRET}
+            issuer_url: ${IAM_IDP_ISSUER_URL}
+            mapper_url: file:///etc/config/kratos/oidc.life-iam.jsonnet
+            scope:
+              - openid
+              - email
+              - phone
+              - profile
+    password:
+      enabled: false
+    profile:
+      enabled: true  
+
+  flows:
+    error:
+      ui_url: ${SELFSERVICE_URL}/error
+
+    settings:
+      ui_url: ${SELFSERVICE_URL}/settings
+      lifespan: 99m
+      privileged_session_max_age: 1m
+      required_aal: highest_available
+
+    recovery:
+      ui_url: ${SELFSERVICE_URL}/recovery
+
+    verification:
+      enabled: true
+      lifespan: 5m
+      ui_url: ${SELFSERVICE_URL}/verification
+      use: code
+      notify_unknown_recipients: true
+      after:
+        default_browser_return_url: ${SELFSERVICE_URL}/welcome
+
+    logout:
+      after:
+        default_browser_return_url: ${SELFSERVICE_URL}/login
+
+    login:
+      lifespan: 5m
+      ui_url: ${SELFSERVICE_URL}/login
+
+    registration:
+      lifespan: 5m
+      ui_url: ${SELFSERVICE_URL}/registration
+      after:
+        code:
+          hooks:
+            - hook: session
+            - hook: show_verification_ui
+
+log:
+  level: debug
+  format: text
+  leak_sensitive_values: true
+
+secrets:
+  cookie:
+    - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+
+cookies:
+  domain: ${DOMAIN}
+  same_site: None
+
+session:
+  lifespan: 720h #30 days
+  cookie:
+    domain: ${DOMAIN}
+    same_site: None
+
+hashers:
+  argon2:
+    parallelism: 1
+    memory: 128MB
+    iterations: 2
+    salt_length: 16
+    key_length: 16
+
+identity:
+  schemas:
+    - id: default
+      url: file:///stub/identity.schema.json
+
+courier:
+  smtp:
+    connection_uri: ${SMTP_CONNECTION_URI}
+    from_address: ${SMTP_FROM_ADDRESS}
+    from_name: ${SMTP_FROM_NAME}
+  channels:
+    - id: sms
+      type: http
+      request_config:
+        url: ${SMS_WEBHOOK_URL}
+        method: POST
+        headers:
+          Content-Type: application/json
+        body: base64://ZnVuY3Rpb24oY3R4KSB7CiAgVG86IGN0eC5yZWNpcGllbnQsCiAgQm9keTogY3R4LmJvZHksCn0=
+

@@ -45,7 +45,7 @@
         "tenant": {
           "title": "Tenant",
           "type": "string",
-          "enum": ["life_ai", "genetica"]
+          "enum": ["life_ai", "genetica", "ecommerce"]
         },
         "lang": {
           "title": "Your preferred language",
